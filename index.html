@@ -1,984 +1,1008 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>CryptoPulsa — Pulsa & Saldo Digital 24 Jam</title><meta
-name="description"
-content="CryptoPulsa - Pulsa dan saldo digital otomatis 24 jam."
-
-«»
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --dark: #111827;
-      --text: #111827;
-      --muted: #64748b;
-      --bg: #f5f7fb;
-      --card: #ffffff;
-      --border: #e5e7eb;
-      --success: #16a34a;
-      --danger: #dc2626;
-    }
-
-    body {
-      font-family:
-        Inter,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Arial,
-        sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
-    button,
-    input,
-    select {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .container {
-      width: min(1120px, calc(100% - 30px));
-      margin: auto;
-    }
-
-    header {
-      background: rgba(255,255,255,.95);
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(12px);
-    }
-
-    .nav {
-      min-height: 66px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-    }
-
-    .logo {
-      font-size: 21px;
-      font-weight: 900;
-      letter-spacing: -.8px;
-    }
-
-    .logo span {
-      color: var(--primary);
-    }
-
-    .online {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      color: var(--success);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .online-dot {
-      width: 8px;
-      height: 8px;
-      background: #22c55e;
-      border-radius: 50%;
-      box-shadow: 0 0 0 4px rgba(34,197,94,.12);
-    }
-
-    .hero {
-      padding: 25px 0 18px;
-    }
-
-    .hero-card {
-      position: relative;
-      overflow: hidden;
-      background: var(--dark);
-      color: white;
-      border-radius: 25px;
-      padding: 38px;
-    }
-
-    .hero-card::before {
-      content: "";
-      position: absolute;
-      width: 280px;
-      height: 280px;
-      border-radius: 50%;
-      background: rgba(37,99,235,.28);
-      right: -100px;
-      top: -130px;
-    }
-
-    .hero-card::after {
-      content: "";
-      position: absolute;
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      background: rgba(59,130,246,.12);
-      right: 120px;
-      bottom: -100px;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 700px;
-    }
-
-    .hero h1 {
-      font-size: clamp(30px, 6vw, 48px);
-      line-height: 1.05;
-      letter-spacing: -1.7px;
-    }
-
-    .hero p {
-      color: #cbd5e1;
-      line-height: 1.6;
-      margin-top: 15px;
-      max-width: 600px;
-    }
-
-    .hero-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-      margin-top: 22px;
-    }
-
-    .hero-badge {
-      padding: 8px 13px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.09);
-      border: 1px solid rgba(255,255,255,.1);
-      font-size: 12px;
-    }
-
-    .service-bar {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 12px;
-      margin: 15px 0 30px;
-    }
-
-    .service-item {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 15px;
-      padding: 15px;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .service-icon {
-      width: 40px;
-      height: 40px;
-      background: #eff6ff;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-
-    .service-item strong {
-      font-size: 13px;
-      display: block;
-    }
-
-    .service-item span {
-      display: block;
-      margin-top: 3px;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .section {
-      padding-bottom: 60px;
-    }
-
-    .section-header {
-      margin-bottom: 18px;
-    }
-
-    .section-header h2 {
-      font-size: 24px;
-      letter-spacing: -.7px;
-    }
-
-    .section-header p {
-      color: var(--muted);
-      font-size: 14px;
-      margin-top: 5px;
-    }
-
-    .products {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 16px;
-    }
-
-    .product-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 19px;
-      padding: 18px;
-      transition: transform .2s, box-shadow .2s;
-    }
-
-    .product-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 35px rgba(15,23,42,.07);
-    }
-
-    .product-icon {
-      width: 50px;
-      height: 50px;
-      background: #eff6ff;
-      border-radius: 15px;
-      display: grid;
-      place-items: center;
-      font-size: 24px;
-      margin-bottom: 14px;
-    }
-
-    .product-card h3 {
-      font-size: 17px;
-    }
-
-    .product-description {
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 5px;
-    }
-
-    .variants-title {
-      font-size: 11px;
-      color: var(--muted);
-      font-weight: 800;
-      letter-spacing: .6px;
-      text-transform: uppercase;
-      margin-top: 18px;
-      margin-bottom: 8px;
-    }
-
-    .variant {
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 13px;
-      margin-top: 8px;
-    }
-
-    .variant-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .nominal {
-      font-size: 15px;
-      font-weight: 900;
-    }
-
-    .available {
-      color: var(--success);
-      font-size: 10px;
-      font-weight: 800;
-    }
-
-    .unavailable {
-      color: var(--danger);
-    }
-
-    .price {
-      font-size: 17px;
-      font-weight: 900;
-      margin-top: 9px;
-    }
-
-    .price-usd {
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 2px;
-    }
-
-    .buy-button {
-      width: 100%;
-      border: 0;
-      background: var(--primary);
-      color: white;
-      border-radius: 11px;
-      padding: 11px;
-      margin-top: 11px;
-      font-weight: 800;
-    }
-
-    .buy-button:hover {
-      background: var(--primary-dark);
-    }
-
-    .buy-button:disabled {
-      background: #cbd5e1;
-      cursor: not-allowed;
-    }
-
-    .loading,
-    .empty,
-    .error {
-      grid-column: 1 / -1;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 17px;
-      padding: 28px;
-      text-align: center;
-      color: var(--muted);
-    }
-
-    /* CHECKOUT */
-
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(15,23,42,.68);
-      z-index: 100;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-      backdrop-filter: blur(4px);
-    }
-
-    .modal.show {
-      display: flex;
-    }
-
-    .modal-box {
-      width: min(480px, 100%);
-      max-height: 92vh;
-      overflow-y: auto;
-      background: white;
-      border-radius: 24px;
-      padding: 25px;
-      position: relative;
-      box-shadow: 0 25px 70px rgba(0,0,0,.25);
-    }
-
-    .modal-close {
-      position: absolute;
-      right: 14px;
-      top: 11px;
-      width: 35px;
-      height: 35px;
-      border: 0;
-      border-radius: 50%;
-      background: #f1f5f9;
-      color: #475569;
-      font-size: 23px;
-    }
-
-    .modal-box h2 {
-      font-size: 24px;
-      letter-spacing: -.6px;
-    }
-
-    .checkout-product {
-      color: var(--muted);
-      margin-top: 5px;
-      margin-bottom: 20px;
-      font-size: 14px;
-    }
-
-    .checkout-highlight {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #eff6ff;
-      border: 1px solid #dbeafe;
-      border-radius: 15px;
-      padding: 13px;
-      margin-bottom: 18px;
-    }
-
-    .checkout-highlight-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      background: white;
-      display: grid;
-      place-items: center;
-      font-size: 19px;
-    }
-
-    .checkout-highlight small {
-      display: block;
-      color: #64748b;
-      font-size: 11px;
-    }
-
-    .checkout-highlight strong {
-      display: block;
-      margin-top: 2px;
-      font-size: 14px;
-    }
-
-    .form-group {
-      margin-top: 15px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 12px;
-      font-weight: 800;
-      margin-bottom: 7px;
-    }
-
-    .form-group label span {
-      color: #94a3b8;
-      font-weight: 500;
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #dbe1e8;
-      border-radius: 11px;
-      outline: none;
-      background: white;
-    }
-
-    .form-control:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37,99,235,.08);
-    }
-
-    .payment-options {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .payment-option {
-      position: relative;
-    }
-
-    .payment-option input {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .payment-label {
-      display: block;
-      border: 1px solid #dbe1e8;
-      border-radius: 14px;
-      padding: 14px;
-      cursor: pointer;
-      transition: .15s;
-      background: white;
-    }
-
-    .payment-label:hover {
-      border-color: #93c5fd;
-    }
-
-    .payment-option input:checked + .payment-label {
-      border-color: var(--primary);
-      background: #eff6ff;
-      box-shadow: 0 0 0 2px rgba(37,99,235,.08);
-    }
-
-    .payment-icon {
-      font-size: 20px;
-      margin-bottom: 7px;
-    }
-
-    .payment-label strong {
-      display: block;
-      font-size: 13px;
-    }
-
-    .payment-label span {
-      display: block;
-      color: var(--muted);
-      font-size: 10px;
-      margin-top: 3px;
-    }
-
-    .summary {
-      background: #f8fafc;
-      border-radius: 15px;
-      padding: 15px;
-      margin-top: 20px;
-      border: 1px solid #f1f5f9;
-    }
-
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-      margin: 7px 0;
-      font-size: 13px;
-    }
-
-    .summary-row span {
-      color: var(--muted);
-    }
-
-    .summary-row strong {
-      text-align: right;
-    }
-
-    .summary-total {
-      border-top: 1px solid #e2e8f0;
-      margin-top: 10px;
-      padding-top: 10px;
-    }
-
-    .summary-total strong {
-      font-size: 16px;
-    }
-
-    .submit-button {
-      width: 100%;
-      border: 0;
-      background: var(--primary);
-      color: white;
-      border-radius: 12px;
-      padding: 15px;
-      margin-top: 18px;
-      font-weight: 900;
-      box-shadow: 0 8px 20px rgba(37,99,235,.18);
-    }
-
-    .submit-button:hover {
-      background: var(--primary-dark);
-    }
-
-    .submit-button:disabled {
-      opacity: .6;
-      cursor: wait;
-    }
-
-    .result {
-      margin-top: 16px;
-    }
-
-    .success-box {
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      color: #166534;
-      border-radius: 14px;
-      padding: 16px;
-      text-align: center;
-    }
-
-    .order-code {
-      font-size: 20px;
-      font-weight: 900;
-      margin: 8px 0;
-      letter-spacing: .5px;
-    }
-
-    footer {
-      background: white;
-      border-top: 1px solid var(--border);
-      padding: 25px 0;
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    @media (max-width: 850px) {
-      .products {
-        grid-template-columns: repeat(2,1fr);
-      }
-    }
-
-    @media (max-width: 600px) {
-
-      .container {
-        width: min(100% - 22px, 500px);
-      }
-
-      .nav {
-        min-height: 60px;
-      }
-
-      .logo {
-        font-size: 19px;
-      }
-
-      .hero {
-        padding-top: 14px;
-      }
-
-      .hero-card {
-        padding: 26px 21px;
-        border-radius: 21px;
-      }
-
-      .hero h1 {
-        font-size: 31px;
-      }
-
-      .hero p {
-        font-size: 13px;
-      }
-
-      .hero-badge {
-        font-size: 11px;
-      }
-
-      .service-bar {
-        grid-template-columns: 1fr;
-      }
-
-      .service-item {
-        padding: 13px;
-      }
-
-      .products {
-        grid-template-columns: 1fr;
-      }
-
-      .section {
-        padding-bottom: 40px;
-      }
-
-      .modal {
-        align-items: flex-end;
-        padding: 0;
-      }
-
-      .modal-box {
-        width: 100%;
-        border-radius: 22px 22px 0 0;
-        max-height: 92vh;
-      }
-
-      .payment-options {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-  </style></head><body><header>
-  <div class="container nav"><div class="logo">
-  Crypto<span>Pulsa</span>
-</div>
-
-<div class="online">
-  <span class="online-dot"></span>
-  Online 24 Jam
-</div>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CryptoPulsa — Pulsa & Saldo Digital 24 Jam</title>
+
+<meta name="description" content="CryptoPulsa - Pulsa dan saldo digital otomatis 24 jam.">
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --primary:#2563eb;
+  --primary-dark:#1d4ed8;
+  --dark:#111827;
+  --text:#111827;
+  --muted:#64748b;
+  --bg:#f5f7fb;
+  --card:#fff;
+  --border:#e5e7eb;
+  --success:#16a34a;
+  --danger:#dc2626;
+}
+
+body{
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+button,input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.container{
+  width:min(1120px,calc(100% - 30px));
+  margin:auto;
+}
+
+/* HEADER */
+
+header{
+  background:rgba(255,255,255,.96);
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:50;
+  backdrop-filter:blur(12px);
+}
+
+.nav{
+  min-height:66px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.logo{
+  font-size:21px;
+  font-weight:900;
+  letter-spacing:-.8px;
+}
+
+.logo span{
+  color:var(--primary);
+}
+
+.online{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:var(--success);
+  font-size:13px;
+  font-weight:700;
+}
+
+.online-dot{
+  width:8px;
+  height:8px;
+  background:#22c55e;
+  border-radius:50%;
+  box-shadow:0 0 0 4px rgba(34,197,94,.12);
+}
+
+/* HERO */
+
+.hero{
+  padding:25px 0 18px;
+}
+
+.hero-card{
+  position:relative;
+  overflow:hidden;
+  background:var(--dark);
+  color:white;
+  border-radius:25px;
+  padding:38px;
+}
+
+.hero-card:before{
+  content:"";
+  position:absolute;
+  width:280px;
+  height:280px;
+  border-radius:50%;
+  background:rgba(37,99,235,.28);
+  right:-100px;
+  top:-130px;
+}
+
+.hero-card:after{
+  content:"";
+  position:absolute;
+  width:160px;
+  height:160px;
+  border-radius:50%;
+  background:rgba(59,130,246,.12);
+  right:120px;
+  bottom:-100px;
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  max-width:700px;
+}
+
+.hero h1{
+  font-size:clamp(30px,6vw,48px);
+  line-height:1.05;
+  letter-spacing:-1.7px;
+}
+
+.hero p{
+  color:#cbd5e1;
+  line-height:1.6;
+  margin-top:15px;
+  max-width:600px;
+}
+
+.hero-badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:22px;
+}
+
+.hero-badge{
+  padding:8px 13px;
+  border-radius:999px;
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.1);
+  font-size:12px;
+}
+
+/* SERVICE */
+
+.service-bar{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin:15px 0 30px;
+}
+
+.service-item{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:15px;
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.service-icon{
+  width:40px;
+  height:40px;
+  background:#eff6ff;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  font-size:18px;
+  flex-shrink:0;
+}
+
+.service-item strong{
+  font-size:13px;
+  display:block;
+}
+
+.service-item span{
+  display:block;
+  margin-top:3px;
+  font-size:11px;
+  color:var(--muted);
+}
+
+/* SECTION */
+
+.section{
+  padding-bottom:60px;
+}
+
+.section-header{
+  margin-bottom:18px;
+}
+
+.section-header h2{
+  font-size:24px;
+  letter-spacing:-.7px;
+}
+
+.section-header p{
+  color:var(--muted);
+  font-size:14px;
+  margin-top:5px;
+}
+
+/* PRODUCTS */
+
+.products{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+
+.product-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:19px;
+  padding:18px;
+  transition:.2s;
+}
+
+.product-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 35px rgba(15,23,42,.07);
+}
+
+.product-icon{
+  width:50px;
+  height:50px;
+  background:#eff6ff;
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+  font-size:24px;
+  margin-bottom:14px;
+}
+
+.product-card h3{
+  font-size:17px;
+}
+
+.product-description{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:5px;
+}
+
+.variants-title{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:800;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  margin-top:18px;
+  margin-bottom:8px;
+}
+
+.variant{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:13px;
+  margin-top:8px;
+}
+
+.variant-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.nominal{
+  font-size:15px;
+  font-weight:900;
+}
+
+.available{
+  color:var(--success);
+  font-size:10px;
+  font-weight:800;
+}
+
+.unavailable{
+  color:var(--danger);
+}
+
+.price{
+  font-size:17px;
+  font-weight:900;
+  margin-top:9px;
+}
+
+.price-usd{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:2px;
+}
+
+.buy-button{
+  width:100%;
+  border:0;
+  background:var(--primary);
+  color:white;
+  border-radius:11px;
+  padding:11px;
+  margin-top:11px;
+  font-weight:800;
+}
+
+.buy-button:hover{
+  background:var(--primary-dark);
+}
+
+.buy-button:disabled{
+  background:#cbd5e1;
+  cursor:not-allowed;
+}
+
+.loading,
+.empty,
+.error{
+  grid-column:1/-1;
+  background:white;
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:28px;
+  text-align:center;
+  color:var(--muted);
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,.68);
+  z-index:100;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  backdrop-filter:blur(4px);
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:min(480px,100%);
+  max-height:92vh;
+  overflow-y:auto;
+  background:white;
+  border-radius:24px;
+  padding:25px;
+  position:relative;
+  box-shadow:0 25px 70px rgba(0,0,0,.25);
+}
+
+.modal-close{
+  position:absolute;
+  right:14px;
+  top:11px;
+  width:35px;
+  height:35px;
+  border:0;
+  border-radius:50%;
+  background:#f1f5f9;
+  color:#475569;
+  font-size:23px;
+}
+
+.modal-box h2{
+  font-size:24px;
+  letter-spacing:-.6px;
+}
+
+.checkout-product{
+  color:var(--muted);
+  margin-top:5px;
+  margin-bottom:20px;
+  font-size:14px;
+}
+
+.checkout-highlight{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:#eff6ff;
+  border:1px solid #dbeafe;
+  border-radius:15px;
+  padding:13px;
+  margin-bottom:18px;
+}
+
+.checkout-highlight-icon{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  background:white;
+  display:grid;
+  place-items:center;
+  font-size:19px;
+}
+
+.checkout-highlight small{
+  display:block;
+  color:#64748b;
+  font-size:11px;
+}
+
+.checkout-highlight strong{
+  display:block;
+  margin-top:2px;
+  font-size:14px;
+}
+
+.form-group{
+  margin-top:15px;
+}
+
+.form-group label{
+  display:block;
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:7px;
+}
+
+.form-group label span{
+  color:#94a3b8;
+  font-weight:500;
+}
+
+.form-control{
+  width:100%;
+  padding:13px;
+  border:1px solid #dbe1e8;
+  border-radius:11px;
+  outline:none;
+  background:white;
+}
+
+.form-control:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(37,99,235,.08);
+}
+
+/* PAYMENT */
+
+.payment-options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.payment-option{
+  position:relative;
+}
+
+.payment-option input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.payment-label{
+  display:block;
+  border:1px solid #dbe1e8;
+  border-radius:14px;
+  padding:14px;
+  cursor:pointer;
+  background:white;
+  transition:.15s;
+}
+
+.payment-label:hover{
+  border-color:#93c5fd;
+}
+
+.payment-option input:checked + .payment-label{
+  border-color:var(--primary);
+  background:#eff6ff;
+  box-shadow:0 0 0 2px rgba(37,99,235,.08);
+}
+
+.payment-icon{
+  font-size:20px;
+  margin-bottom:7px;
+}
+
+.payment-label strong{
+  display:block;
+  font-size:13px;
+}
+
+.payment-label span{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:3px;
+}
+
+.summary{
+  background:#f8fafc;
+  border-radius:15px;
+  padding:15px;
+  margin-top:20px;
+  border:1px solid #f1f5f9;
+}
+
+.summary-row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  margin:7px 0;
+  font-size:13px;
+}
+
+.summary-row span{
+  color:var(--muted);
+}
+
+.summary-row strong{
+  text-align:right;
+}
+
+.summary-total{
+  border-top:1px solid #e2e8f0;
+  margin-top:10px;
+  padding-top:10px;
+}
+
+.summary-total strong{
+  font-size:16px;
+}
+
+.submit-button{
+  width:100%;
+  border:0;
+  background:var(--primary);
+  color:white;
+  border-radius:12px;
+  padding:15px;
+  margin-top:18px;
+  font-weight:900;
+  box-shadow:0 8px 20px rgba(37,99,235,.18);
+}
+
+.submit-button:hover{
+  background:var(--primary-dark);
+}
+
+.submit-button:disabled{
+  opacity:.6;
+  cursor:wait;
+}
+
+.result{
+  margin-top:16px;
+}
+
+.success-box{
+  background:#f0fdf4;
+  border:1px solid #bbf7d0;
+  color:#166534;
+  border-radius:14px;
+  padding:16px;
+  text-align:center;
+}
+
+.order-code{
+  font-size:20px;
+  font-weight:900;
+  margin:8px 0;
+  letter-spacing:.5px;
+}
+
+/* FOOTER */
+
+footer{
+  background:white;
+  border-top:1px solid var(--border);
+  padding:25px 0;
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:850px){
+  .products{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:600px){
+
+  .container{
+    width:min(100% - 22px,500px);
+  }
+
+  .nav{
+    min-height:60px;
+  }
+
+  .logo{
+    font-size:19px;
+  }
+
+  .hero{
+    padding-top:14px;
+  }
+
+  .hero-card{
+    padding:26px 21px;
+    border-radius:21px;
+  }
+
+  .hero h1{
+    font-size:31px;
+  }
+
+  .hero p{
+    font-size:13px;
+  }
+
+  .hero-badge{
+    font-size:11px;
+  }
+
+  .service-bar{
+    grid-template-columns:1fr;
+  }
+
+  .service-item{
+    padding:13px;
+  }
+
+  .products{
+    grid-template-columns:1fr;
+  }
+
+  .section{
+    padding-bottom:40px;
+  }
+
+  .modal{
+    align-items:flex-end;
+    padding:0;
+  }
+
+  .modal-box{
+    width:100%;
+    border-radius:22px 22px 0 0;
+    max-height:92vh;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container nav">
+
+    <div class="logo">
+      Crypto<span>Pulsa</span>
+    </div>
+
+    <div class="online">
+      <span class="online-dot"></span>
+      Online 24 Jam
+    </div>
 
   </div>
-</header><main>  <section class="hero"><div class="container">
+</header>
 
-  <div class="hero-card">
+<main>
 
-    <div class="hero-content">
+<section class="hero">
 
-      <h1>
-        Pulsa & Saldo Digital,
-        Otomatis 24 Jam.
-      </h1>
+  <div class="container">
 
-      <p>
-        Tukarkan saldo digital menjadi pulsa,
-        e-wallet dan produk digital dengan proses
-        cepat. Tanpa register dan tanpa login.
-      </p>
+    <div class="hero-card">
 
-      <div class="hero-badges">
+      <div class="hero-content">
 
-        <div class="hero-badge">⚡ Otomatis</div>
-        <div class="hero-badge">🕐 24 Jam</div>
-        <div class="hero-badge">₿ Crypto</div>
-        <div class="hero-badge">💳 PayPal</div>
+        <h1>
+          Pulsa & Saldo Digital,
+          Otomatis 24 Jam.
+        </h1>
+
+        <p>
+          Tukarkan saldo digital menjadi pulsa,
+          e-wallet dan produk digital dengan proses
+          cepat. Tanpa register dan tanpa login.
+        </p>
+
+        <div class="hero-badges">
+
+          <div class="hero-badge">⚡ Otomatis</div>
+          <div class="hero-badge">🕐 24 Jam</div>
+          <div class="hero-badge">₿ Crypto</div>
+          <div class="hero-badge">💳 PayPal</div>
+
+        </div>
 
       </div>
 
-    </div>
-
-  </div>
-
-</div>
-
-  </section>  <div class="container"><div class="service-bar">
-
-  <div class="service-item">
-    <div class="service-icon">⚡</div>
-    <div>
-      <strong>Proses Otomatis</strong>
-      <span>Pesanan diproses sistem</span>
-    </div>
-  </div>
-
-  <div class="service-item">
-    <div class="service-icon">🕐</div>
-    <div>
-      <strong>Online 24 Jam</strong>
-      <span>Transaksi kapan saja</span>
-    </div>
-  </div>
-
-  <div class="service-item">
-    <div class="service-icon">🔐</div>
-    <div>
-      <strong>Tanpa Register</strong>
-      <span>Langsung checkout</span>
-    </div>
-  </div>
-
-</div>
-
-
-<section class="section">
-
-  <div class="section-header">
-
-    <h2>Produk</h2>
-
-    <p>
-      Pilih produk dan nominal yang kamu butuhkan.
-    </p>
-
-  </div>
-
-
-  <div id="products" class="products">
-
-    <div class="loading">
-      Memuat produk...
     </div>
 
   </div>
 
 </section>
 
-  </div></main><!-- CHECKOUT --><div id="checkoutModal" class="modal">  <div class="modal-box"><button
-  class="modal-close"
-  onclick="closeCheckout()"
-  aria-label="Tutup"
->
-  ×
-</button>
+<div class="container">
 
-<h2>Checkout</h2>
+  <div class="service-bar">
 
-<div
-  id="checkoutProduct"
-  class="checkout-product"
->
-  -
-</div>
+    <div class="service-item">
+      <div class="service-icon">⚡</div>
+      <div>
+        <strong>Proses Otomatis</strong>
+        <span>Pesanan diproses sistem</span>
+      </div>
+    </div>
 
+    <div class="service-item">
+      <div class="service-icon">🕐</div>
+      <div>
+        <strong>Online 24 Jam</strong>
+        <span>Transaksi kapan saja</span>
+      </div>
+    </div>
 
-<div class="checkout-highlight">
+    <div class="service-item">
+      <div class="service-icon">🔐</div>
+      <div>
+        <strong>Tanpa Register</strong>
+        <span>Langsung checkout</span>
+      </div>
+    </div>
 
-  <div class="checkout-highlight-icon">
-    🛒
   </div>
 
-  <div>
+  <section class="section">
 
-    <small>Pesanan kamu</small>
+    <div class="section-header">
 
-    <strong id="checkoutHighlight">
+      <h2>Produk</h2>
+
+      <p>
+        Pilih produk dan nominal yang kamu butuhkan.
+      </p>
+
+    </div>
+
+    <div id="products" class="products">
+
+      <div class="loading">
+        Memuat produk...
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+</main>
+
+<!-- CHECKOUT -->
+
+<div id="checkoutModal" class="modal">
+
+  <div class="modal-box">
+
+    <button
+      class="modal-close"
+      onclick="closeCheckout()"
+      aria-label="Tutup"
+      type="button"
+    >
+      ×
+    </button>
+
+    <h2>Checkout</h2>
+
+    <div id="checkoutProduct" class="checkout-product">
       -
-    </strong>
+    </div>
+
+    <div class="checkout-highlight">
+
+      <div class="checkout-highlight-icon">
+        🛒
+      </div>
+
+      <div>
+
+        <small>Pesanan kamu</small>
+
+        <strong id="highlightProduct">
+          -
+        </strong>
+
+      </div>
+
+    </div>
+
+    <form id="checkoutForm">
+
+      <div class="form-group">
+
+        <label>
+          Nomor tujuan
+        </label>
+
+        <input
+          id="destination"
+          class="form-control"
+          type="text"
+          inputmode="tel"
+          placeholder="08xxxxxxxxxx"
+          autocomplete="tel"
+          required
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>
+          Nama <span>(opsional)</span>
+        </label>
+
+        <input
+          id="customerName"
+          class="form-control"
+          type="text"
+          placeholder="Nama kamu"
+          autocomplete="name"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>
+          Metode pembayaran
+        </label>
+
+        <div class="payment-options">
+
+          <div class="payment-option">
+
+            <input
+              type="radio"
+              id="paymentCrypto"
+              name="paymentMethod"
+              value="crypto"
+              required
+            >
+
+            <label
+              class="payment-label"
+              for="paymentCrypto"
+            >
+
+              <div class="payment-icon">
+                ₿
+              </div>
+
+              <strong>Crypto USDT</strong>
+
+              <span>Pembayaran USDT</span>
+
+            </label>
+
+          </div>
+
+          <div class="payment-option">
+
+            <input
+              type="radio"
+              id="paymentPaypal"
+              name="paymentMethod"
+              value="paypal"
+            >
+
+            <label
+              class="payment-label"
+              for="paymentPaypal"
+            >
+
+              <div class="payment-icon">
+                💳
+              </div>
+
+              <strong>PayPal</strong>
+
+              <span>Pembayaran USD</span>
+
+            </label>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="summary">
+
+        <div class="summary-row">
+
+          <span>Produk</span>
+
+          <strong id="summaryProduct">
+            -
+          </strong>
+
+        </div>
+
+        <div class="summary-row">
+
+          <span>Harga IDR</span>
+
+          <strong id="checkoutPrice">
+            -
+          </strong>
+
+        </div>
+
+        <div class="summary-row summary-total">
+
+          <span>Total USD</span>
+
+          <strong id="checkoutUSD">
+            -
+          </strong>
+
+        </div>
+
+      </div>
+
+      <button
+        id="submitOrder"
+        class="submit-button"
+        type="submit"
+      >
+        🔒 Buat Pesanan
+      </button>
+
+    </form>
+
+    <div id="checkoutResult" class="result"></div>
 
   </div>
 
 </div>
 
+<footer>
 
-<form id="checkoutForm">
+  <div class="container">
 
-  <div class="form-group">
-
-    <label>
-      Nomor tujuan
-    </label>
-
-    <input
-      id="destination"
-      class="form-control"
-      type="text"
-      inputmode="tel"
-      placeholder="08xxxxxxxxxx"
-      autocomplete="tel"
-      required
-    >
+    © 2026 CryptoPulsa —
+    Pulsa & Saldo Digital Otomatis 24 Jam
 
   </div>
 
+</footer>
 
-  <div class="form-group">
-
-    <label>
-      Nama <span>(opsional)</span>
-    </label>
-
-    <input
-      id="customerName"
-      class="form-control"
-      type="text"
-      placeholder="Nama kamu"
-      autocomplete="name"
-    >
-
-  </div>
-
-
-  <div class="form-group">
-
-    <label>
-      Metode pembayaran
-    </label>
-
-    <div class="payment-options">
-
-      <div class="payment-option">
-
-        <input
-          id="paymentCrypto"
-          type="radio"
-          name="paymentMethod"
-          value="crypto"
-          required
-        >
-
-        <label
-          class="payment-label"
-          for="paymentCrypto"
-        >
-
-          <div class="payment-icon">
-            ₿
-          </div>
-
-          <strong>Crypto</strong>
-
-          <span>
-            USDT
-          </span>
-
-        </label>
-
-      </div>
-
-
-      <div class="payment-option">
-
-        <input
-          id="paymentPaypal"
-          type="radio"
-          name="paymentMethod"
-          value="paypal"
-          required
-        >
-
-        <label
-          class="payment-label"
-          for="paymentPaypal"
-        >
-
-          <div class="payment-icon">
-            💳
-          </div>
-
-          <strong>PayPal</strong>
-
-          <span>
-            USD
-          </span>
-
-        </label>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <div class="summary">
-
-    <div class="summary-row">
-
-      <span>Produk</span>
-
-      <strong id="summaryProduct">
-        -
-      </strong>
-
-    </div>
-
-
-    <div class="summary-row">
-
-      <span>Harga IDR</span>
-
-      <strong id="checkoutPrice">
-        -
-      </strong>
-
-    </div>
-
-
-    <div class="summary-row summary-total">
-
-      <span>Total USD</span>
-
-      <strong id="checkoutUSD">
-        -
-      </strong>
-
-    </div>
-
-  </div>
-
-
-  <button
-    id="submitOrder"
-    class="submit-button"
-    type="submit"
-  >
-    🔒 Buat Pesanan
-  </button>
-
-</form>
-
-
-<div
-  id="checkoutResult"
-  class="result"
-></div>
-
-  </div></div><footer>  <div class="container">© 2026 CryptoPulsa —
-Pulsa & Saldo Digital Otomatis 24 Jam
-
-  </div></footer><script type="module">
+<script type="module">
 
 import {
   createClient
-} from 'https://esm.sh/@supabase/supabase-js@2';
+}
+from
+'https://esm.sh/@supabase/supabase-js@2';
 
 
 /* =========================
@@ -986,24 +1010,22 @@ import {
 ========================= */
 
 const SUPABASE_URL =
-  'https://yteecjibmanhdxkdseod.supabase.co';
+'https://yteecjibmanhdxkdseod.supabase.co';
 
 const SUPABASE_KEY =
-  'sb_publishable_x4MDLBw3OBSS2HnyB2ssKg_UfWOS_H4';
-
+'sb_publishable_x4MDLBw3OBSS2HnyB2ssKg_UfWOS_H4';
 
 const supabase =
-  createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 
 const productsContainer =
-  document.getElementById(
-    'products'
-  );
-
+document.getElementById(
+  'products'
+);
 
 let selectedVariant = null;
 
@@ -1012,7 +1034,7 @@ let selectedVariant = null;
    LOAD PRODUCTS
 ========================= */
 
-async function loadProducts() {
+async function loadProducts(){
 
   productsContainer.innerHTML = `
     <div class="loading">
@@ -1020,13 +1042,13 @@ async function loadProducts() {
     </div>
   `;
 
-
-  try {
+  try{
 
     const {
       data,
       error
-    } = await supabase
+    } =
+    await supabase
 
       .from('products')
 
@@ -1037,7 +1059,6 @@ async function loadProducts() {
         category,
         description,
         image_url,
-
         product_variants (
           id,
           name,
@@ -1053,20 +1074,23 @@ async function loadProducts() {
       .eq(
         'is_active',
         true
+      )
+
+      .order(
+        'id',
+        { ascending:true }
       );
 
 
-    if (error) {
-
+    if(error){
       throw error;
-
     }
 
 
-    if (
+    if(
       !data ||
       data.length === 0
-    ) {
+    ){
 
       productsContainer.innerHTML = `
         <div class="empty">
@@ -1075,7 +1099,6 @@ async function loadProducts() {
       `;
 
       return;
-
     }
 
 
@@ -1085,24 +1108,40 @@ async function loadProducts() {
     data.forEach(product => {
 
       const card =
-        document.createElement(
-          'div'
-        );
+      document.createElement(
+        'div'
+      );
 
       card.className =
-        'product-card';
+      'product-card';
 
+
+      /*
+       * Hilangkan variant duplikat
+       * berdasarkan ID variant.
+       */
 
       const variants =
-        product.product_variants || [];
+      Array.from(
+        new Map(
+          (product.product_variants || [])
+          .map(
+            variant =>
+              [
+                variant.id,
+                variant
+              ]
+          )
+        ).values()
+      );
 
 
       let variantsHTML = '';
 
 
-      if (
+      if(
         variants.length === 0
-      ) {
+      ){
 
         variantsHTML = `
           <div class="empty">
@@ -1110,16 +1149,18 @@ async function loadProducts() {
           </div>
         `;
 
-      } else {
+      }else{
 
         variantsHTML =
-          variants.map(
+        variants
+
+          .map(
             variant => {
 
               const available =
-                variant.is_available &&
-                variant.stock_status !==
-                'unavailable';
+              variant.is_available === true &&
+              variant.stock_status !==
+              'unavailable';
 
 
               return `
@@ -1129,30 +1170,29 @@ async function loadProducts() {
                   <div class="variant-top">
 
                     <div class="nominal">
-
                       ${formatNominal(
                         variant.nominal
                       )}
-
                     </div>
 
                     <div class="
                       available
-                      ${available
+                      ${
+                        available
                         ? ''
-                        : 'unavailable'}
+                        : 'unavailable'
+                      }
                     ">
 
                       ${
                         available
-                          ? '● Tersedia'
-                          : 'Tidak tersedia'
+                        ? '● Tersedia'
+                        : 'Tidak tersedia'
                       }
 
                     </div>
 
                   </div>
-
 
                   <div class="price">
 
@@ -1162,38 +1202,36 @@ async function loadProducts() {
 
                   </div>
 
-
                   <div class="price-usd">
 
                     ${
                       variant.price_usd
-                        ? '$' +
-                          Number(
-                            variant.price_usd
-                          ).toFixed(2)
-                        : '-'
+                      ? '$' +
+                        Number(
+                          variant.price_usd
+                        ).toFixed(2)
+                      : '-'
                     }
 
                   </div>
-
 
                   <button
                     class="buy-button"
                     ${
                       available
-                        ? ''
-                        : 'disabled'
+                      ? ''
+                      : 'disabled'
                     }
-
                     data-variant-id="${
                       variant.id
                     }"
+                    type="button"
                   >
 
                     ${
                       available
-                        ? 'Beli Sekarang'
-                        : 'Tidak Tersedia'
+                      ? 'Beli Sekarang'
+                      : 'Tidak Tersedia'
                     }
 
                   </button>
@@ -1203,7 +1241,8 @@ async function loadProducts() {
               `;
 
             }
-          ).join('');
+          )
+          .join('');
 
       }
 
@@ -1218,7 +1257,6 @@ async function loadProducts() {
 
         </div>
 
-
         <h3>
 
           ${escapeHTML(
@@ -1226,7 +1264,6 @@ async function loadProducts() {
           )}
 
         </h3>
-
 
         <div class="product-description">
 
@@ -1236,13 +1273,11 @@ async function loadProducts() {
 
         </div>
 
-
         <div class="variants-title">
 
           Pilih Nominal
 
         </div>
-
 
         ${variantsHTML}
 
@@ -1250,42 +1285,40 @@ async function loadProducts() {
 
 
       productsContainer
-        .appendChild(card);
+      .appendChild(card);
 
     });
 
 
     document
-      .querySelectorAll(
-        '.buy-button'
-      )
-      .forEach(button => {
+    .querySelectorAll(
+      '.buy-button'
+    )
+    .forEach(button => {
 
-        button.addEventListener(
-          'click',
-          () => {
+      button.addEventListener(
+        'click',
+        () => {
 
-            const id =
-              Number(
-                button.dataset
-                  .variantId
-              );
+          openCheckout(
+            Number(
+              button.dataset
+                .variantId
+            )
+          );
 
-            openCheckout(id);
+        }
+      );
 
-          }
-        );
-
-      });
+    });
 
 
-  } catch (error) {
+  }catch(error){
 
     console.error(
       'Supabase error:',
       error
     );
-
 
     productsContainer.innerHTML = `
 
@@ -1296,12 +1329,10 @@ async function loadProducts() {
         <br><br>
 
         <small>
-
           ${escapeHTML(
             error.message ||
             'Unknown error'
           )}
-
         </small>
 
       </div>
@@ -1319,59 +1350,56 @@ async function loadProducts() {
 
 async function openCheckout(
   variantId
-) {
+){
 
-  const {
-    data,
-    error
-  } = await supabase
+  try{
 
-    .from('product_variants')
+    const {
+      data,
+      error
+    } =
+    await supabase
 
-    .select(`
-      id,
-      name,
-      nominal,
-      price_idr,
-      price_usd,
-      product_id,
-
-      products (
-        name
+      .from(
+        'product_variants'
       )
-    `)
 
-    .eq(
-      'id',
-      variantId
-    )
+      .select(`
+        id,
+        name,
+        nominal,
+        price_idr,
+        price_usd,
+        product_id,
+        products (
+          name
+        )
+      `)
 
-    .single();
+      .eq(
+        'id',
+        variantId
+      )
 
-
-  if (error) {
-
-    console.error(error);
-
-    alert(
-      'Gagal mengambil data produk.'
-    );
-
-    return;
-
-  }
+      .single();
 
 
-  selectedVariant = data;
+    if(error){
+      throw error;
+    }
 
 
-  const productName =
+    selectedVariant =
+    data;
+
+
+    const productName =
     data.products
-      ? data.products.name
-      : data.name;
+    ? data.products.name
+    : data.name;
 
 
-  const productLabel =
+    const productLabel =
     productName +
     ' — ' +
     formatNominal(
@@ -1379,7 +1407,7 @@ async function openCheckout(
     );
 
 
-  document
+    document
     .getElementById(
       'checkoutProduct'
     )
@@ -1387,15 +1415,15 @@ async function openCheckout(
     productLabel;
 
 
-  document
+    document
     .getElementById(
-      'checkoutHighlight'
+      'highlightProduct'
     )
     .textContent =
     productLabel;
 
 
-  document
+    document
     .getElementById(
       'summaryProduct'
     )
@@ -1403,7 +1431,7 @@ async function openCheckout(
     productLabel;
 
 
-  document
+    document
     .getElementById(
       'checkoutPrice'
     )
@@ -1413,34 +1441,27 @@ async function openCheckout(
     );
 
 
-  document
+    document
     .getElementById(
       'checkoutUSD'
     )
     .textContent =
     data.price_usd
-      ? '$' +
-        Number(
-          data.price_usd
-        ).toFixed(2)
-      : '-';
+    ? '$' +
+      Number(
+        data.price_usd
+      ).toFixed(2)
+    : '-';
 
 
-  document
+    document
     .getElementById(
       'checkoutResult'
     )
     .innerHTML = '';
 
 
-  document
-    .getElementById(
-      'checkoutForm'
-    )
-    .reset();
-
-
-  document
+    document
     .getElementById(
       'checkoutModal'
     )
@@ -1448,31 +1469,43 @@ async function openCheckout(
     .add('show');
 
 
-  setTimeout(
-    () => {
+    setTimeout(
+      () => {
 
-      document
+        document
         .getElementById(
           'destination'
         )
         .focus();
 
-    },
-    100
-  );
+      },
+      100
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      'Gagal mengambil data produk: ' +
+      error.message
+    );
+
+  }
 
 }
 
 
 window.closeCheckout =
-function () {
+function(){
 
   document
-    .getElementById(
-      'checkoutModal'
-    )
-    .classList
-    .remove('show');
+  .getElementById(
+    'checkoutModal'
+  )
+  .classList
+  .remove('show');
 
 };
 
@@ -1482,224 +1515,228 @@ function () {
 ========================= */
 
 document
-  .getElementById(
-    'checkoutForm'
-  )
-  .addEventListener(
-    'submit',
-    async event => {
+.getElementById(
+  'checkoutForm'
+)
+.addEventListener(
+  'submit',
+  async event => {
 
-      event.preventDefault();
+    event.preventDefault();
 
 
-      if (!selectedVariant) {
+    if(!selectedVariant){
+      return;
+    }
 
-        return;
 
+    const destination =
+    document
+    .getElementById(
+      'destination'
+    )
+    .value
+    .trim();
+
+
+    const customerName =
+    document
+    .getElementById(
+      'customerName'
+    )
+    .value
+    .trim();
+
+
+    const paymentInput =
+    document
+    .querySelector(
+      'input[name="paymentMethod"]:checked'
+    );
+
+
+    const paymentMethod =
+    paymentInput
+    ? paymentInput.value
+    : '';
+
+
+    if(
+      !destination ||
+      !paymentMethod
+    ){
+
+      alert(
+        'Lengkapi nomor tujuan dan metode pembayaran.'
+      );
+
+      return;
+
+    }
+
+
+    const submitButton =
+    document
+    .getElementById(
+      'submitOrder'
+    );
+
+
+    submitButton.disabled =
+    true;
+
+    submitButton.textContent =
+    'Membuat pesanan...';
+
+
+    /*
+     * Order code dibuat di frontend
+     * seperti sistem sebelumnya.
+     */
+
+    const orderCode =
+    'CP-' +
+    Date.now()
+    .toString(36)
+    .toUpperCase();
+
+
+    try{
+
+      const {
+        data,
+        error
+      } =
+      await supabase
+
+        .from('orders')
+
+        .insert({
+
+          order_code:
+          orderCode,
+
+          product_id:
+          selectedVariant.product_id,
+
+          variant_id:
+          selectedVariant.id,
+
+          customer_name:
+          customerName || null,
+
+          customer_contact:
+          destination,
+
+          destination:
+          destination,
+
+          quantity:
+          1,
+
+          price_idr:
+          selectedVariant.price_idr,
+
+          price_usd:
+          selectedVariant.price_usd,
+
+          exchange_rate:
+          12000,
+
+          payment_method:
+          paymentMethod,
+
+          payment_status:
+          'pending',
+
+          order_status:
+          'payment_pending'
+
+        })
+
+        .select()
+        .single();
+
+
+      if(error){
+        throw error;
       }
 
 
-      const destination =
-        document
-          .getElementById(
-            'destination'
-          )
-          .value
-          .trim();
+      /*
+       * PENTING:
+       * Setelah order berhasil,
+       * langsung buka halaman pembayaran.
+       */
+
+      const paymentUrl =
+      'payment.html?order=' +
+      encodeURIComponent(
+        data.order_code
+      );
 
 
-      const customerName =
-        document
-          .getElementById(
-            'customerName'
-          )
-          .value
-          .trim();
+      /*
+       * Mengganti halaman sekarang.
+       * Ini lebih aman daripada window.open
+       * karena browser mobile dapat memblokir
+       * popup/tab baru.
+       */
+
+      window.location.href =
+      paymentUrl;
 
 
-      const paymentMethod =
-        document
-          .querySelector(
-            'input[name="paymentMethod"]:checked'
-          )
-          ?.value;
+    }catch(error){
+
+      console.error(
+        'Create order error:',
+        error
+      );
 
 
-      if (
-        !destination ||
-        !paymentMethod
-      ) {
+      document
+      .getElementById(
+        'checkoutResult'
+      )
+      .innerHTML = `
 
-        return;
+        <div
+          class="error"
+          style="
+            grid-column:auto;
+            margin-top:0;
+          "
+        >
 
-      }
+          Gagal membuat pesanan.
 
+          <br><br>
 
-      const submitButton =
-        document
-          .getElementById(
-            'submitOrder'
-          );
+          <small>
+
+            ${escapeHTML(
+              error.message ||
+              'Unknown error'
+            )}
+
+          </small>
+
+        </div>
+
+      `;
 
 
       submitButton.disabled =
-        true;
+      false;
 
       submitButton.textContent =
-        'Membuat pesanan...';
-
-
-      const orderCode =
-        'CP-' +
-        Date.now()
-          .toString(36)
-          .toUpperCase();
-
-
-      try {
-
-        const {
-          data,
-          error
-        } = await supabase
-
-          .from('orders')
-
-          .insert({
-
-            order_code:
-              orderCode,
-
-            product_id:
-              selectedVariant
-                .product_id,
-
-            variant_id:
-              selectedVariant.id,
-
-            customer_name:
-              customerName ||
-              null,
-
-            customer_contact:
-              destination,
-
-            destination:
-              destination,
-
-            quantity:
-              1,
-
-            price_idr:
-              selectedVariant
-                .price_idr,
-
-            price_usd:
-              selectedVariant
-                .price_usd,
-
-            exchange_rate:
-              12000,
-
-            payment_method:
-              paymentMethod,
-
-            payment_status:
-              'pending',
-
-            order_status:
-              'payment_pending'
-
-          })
-
-          .select()
-
-          .single();
-
-
-        if (error) {
-
-          throw error;
-
-        }
-
-
-        if (
-          !data ||
-          !data.order_code
-        ) {
-
-          throw new Error(
-            'Order berhasil dibuat tetapi Order ID tidak diterima.'
-          );
-
-        }
-
-
-        /*
-          ORDER BERHASIL.
-          
-          Langsung buka halaman pembayaran.
-        */
-
-        window.location.href =
-          './order.html?order=' +
-          encodeURIComponent(
-            data.order_code
-          );
-
-      } catch (error) {
-
-        console.error(
-          error
-        );
-
-
-        document
-          .getElementById(
-            'checkoutResult'
-          )
-          .innerHTML = `
-
-            <div
-              style="
-                background:#fef2f2;
-                border:1px solid #fecaca;
-                color:#991b1b;
-                padding:14px;
-                border-radius:12px;
-              "
-            >
-
-              Gagal membuat pesanan.
-
-              <br><br>
-
-              <small>
-
-                ${escapeHTML(
-                  error.message ||
-                  'Unknown error'
-                )}
-
-              </small>
-
-            </div>
-
-          `;
-
-      } finally {
-
-        submitButton.disabled =
-          false;
-
-        submitButton.textContent =
-          '🔒 Buat Pesanan';
-
-      }
+      '🔒 Buat Pesanan';
 
     }
-  );
+
+  }
+);
 
 
 /* =========================
@@ -1708,14 +1745,14 @@ document
 
 function formatIDR(
   value
-) {
+){
 
   return new Intl.NumberFormat(
     'id-ID',
     {
-      style: 'currency',
-      currency: 'IDR',
-      maximumFractionDigits: 0
+      style:'currency',
+      currency:'IDR',
+      maximumFractionDigits:0
     }
   ).format(
     Number(value || 0)
@@ -1726,15 +1763,13 @@ function formatIDR(
 
 function formatNominal(
   value
-) {
+){
 
   const number =
-    Number(value || 0);
+  Number(value || 0);
 
 
-  if (
-    number >= 1000000
-  ) {
+  if(number >= 1000000){
 
     return (
       number / 1000000
@@ -1743,9 +1778,7 @@ function formatNominal(
   }
 
 
-  if (
-    number >= 1000
-  ) {
+  if(number >= 1000){
 
     return (
       number / 1000
@@ -1755,117 +1788,77 @@ function formatNominal(
 
 
   return number
-    .toLocaleString(
-      'id-ID'
-    );
+  .toLocaleString(
+    'id-ID'
+  );
 
 }
 
 
 function getIcon(
   category
-) {
+){
 
-  if (
-    category === 'ewallet'
-  ) {
+  switch(
+    String(
+      category || ''
+    ).toLowerCase()
+  ){
 
-    return '💳';
+    case 'ewallet':
+      return '💳';
 
-  }
+    case 'pulsa':
+      return '📱';
 
+    case 'pln':
+      return '⚡';
 
-  if (
-    category === 'pulsa'
-  ) {
+    case 'game':
+      return '🎮';
 
-    return '📱';
-
-  }
-
-
-  if (
-    category === 'pln'
-  ) {
-
-    return '⚡';
+    default:
+      return '🛒';
 
   }
-
-
-  if (
-    category === 'game'
-  ) {
-
-    return '🎮';
-
-  }
-
-
-  return '🛒';
 
 }
 
 
 function escapeHTML(
   value
-) {
+){
 
   return String(
-    value ?? ''
+    value || ''
   )
 
-    .replace(
-      /&/g,
-      '&amp;'
-    )
+  .replace(
+    /&/g,
+    '&amp;'
+  )
 
-    .replace(
-      /</g,
-      '&lt;'
-    )
+  .replace(
+    /</g,
+    '&lt;'
+  )
 
-    .replace(
-      />/g,
-      '&gt;'
-    )
+  .replace(
+    />/g,
+    '&gt;'
+  )
 
-    .replace(
-      /"/g,
-      '&quot;'
-    )
+  .replace(
+    /"/g,
+    '&quot;'
+  )
 
-    .replace(
-      /'/g,
-      '&#039;'
-    );
+  .replace(
+    /'/g,
+    '&#039;'
+  );
 
 }
-
-
-/* =========================
-   CLOSE MODAL OUTSIDE
-========================= */
-
-document
-  .getElementById(
-    'checkoutModal'
-  )
-  .addEventListener(
-    'click',
-    event => {
-
-      if (
-        event.target.id ===
-        'checkoutModal'
-      ) {
-
-        closeCheckout();
-
-      }
-
-    }
-  );
 
 
 /* =========================
@@ -1874,5 +1867,7 @@ document
 
 loadProducts();
 
-</script></body>
+</script>
+
+</body>
   </html>
