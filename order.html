@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Order — CryptoPulsa</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #111827;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: min(500px, calc(100% - 24px));
+      margin: auto;
+    }
+
+    header {
+      height: 64px;
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .logo span {
+      color: #2563eb;
+    }
+
+    main {
+      padding: 22px 0;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      border: 1px solid #e5e7eb;
+      padding: 22px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      color: #64748b;
+      font-size: 13px;
+      margin-bottom: 22px;
+    }
+
+    .status {
+      text-align: center;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      padding: 18px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    .status-icon {
+      font-size: 28px;
+      margin-bottom: 7px;
+    }
+
+    .status strong {
+      display: block;
+      font-size: 16px;
+    }
+
+    .order-code {
+      text-align: center;
+      background: #f8fafc;
+      padding: 15px;
+      border-radius: 13px;
+      margin-bottom: 18px;
+    }
+
+    .order-code small {
+      display: block;
+      color: #64748b;
+      margin-bottom: 5px;
+    }
+
+    .order-code strong {
+      font-size: 20px;
+      letter-spacing: .5px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 14px;
+    }
+
+    .row span {
+      color: #64748b;
+    }
+
+    .row strong {
+      text-align: right;
+    }
+
+    .pay-button {
+      width: 100%;
+      border: 0;
+      background: #2563eb;
+      color: white;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      margin-top: 20px;
+    }
+
+    .pay-button:disabled {
+      background: #cbd5e1;
+    }
+
+    .message {
+      text-align: center;
+      color: #64748b;
+      font-size: 13px;
+      margin-top: 15px;
+    }
+
+    .error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      padding: 15px;
+      border-radius: 13px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="container">
+    <div class="logo">
+      Crypto<span>Pulsa</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <div class="container">
+
+    <div id="content" class="card">
+
+      <div style="text-align:center">
+        Memuat pesanan...
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+<script type="module">
+
+  import {
+    createClient
+  } from
+  'https://esm.sh/@supabase/supabase-js@2';
+
+
+  const SUPABASE_URL =
+    'https://yteecjibmanhdxkdseod.supabase.co';
+
+  const SUPABASE_KEY =
+    'sb_publishable_x4MDLBw3OBSS2HnyB2ssKg_UfWOS_H4';
+
+
+  const supabase =
+    createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+
+  const content =
+    document.getElementById(
+      'content'
+    );
+
+
+  function escapeHTML(value) {
+
+    return String(
+      value || ''
+    )
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+
+  }
+
+
+  function formatIDR(value) {
+
+    return new Intl.NumberFormat(
+      'id-ID',
+      {
+        style: 'currency',
+        currency: 'IDR',
+        maximumFractionDigits: 0
+      }
+    ).format(
+      Number(value || 0)
+    );
+
+  }
+
+
+  function getOrderCode() {
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+    return params.get(
+      'order'
+    );
+
+  }
+
+
+  async function loadOrder() {
+
+    const orderCode =
+      getOrderCode();
+
+
+    if (!orderCode) {
+
+      content.innerHTML = `
+        <div class="error">
+          Order ID tidak ditemukan.
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    const {
+      data,
+      error
+    } = await supabase
+
+      .from('orders')
+
+      .select(`
+        order_code,
+        customer_contact,
+        destination,
+        quantity,
+        price_idr,
+        price_usd,
+        payment_method,
+        payment_status,
+        order_status,
+        created_at,
+
+        products (
+          name
+        ),
+
+        product_variants (
+          name,
+          nominal
+        )
+      `)
+
+      .eq(
+        'order_code',
+        orderCode
+      )
+
+      .single();
+
+
+    if (error) {
+
+      console.error(error);
+
+      content.innerHTML = `
+        <div class="error">
+          Pesanan tidak ditemukan.
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    const productName =
+      data.products
+        ? data.products.name
+        : '-';
+
+
+    let statusText =
+      'Menunggu pembayaran';
+
+    let statusIcon =
+      '💳';
+
+
+    if (
+      data.payment_status ===
+      'paid'
+    ) {
+
+      statusText =
+        'Pembayaran diterima';
+
+      statusIcon =
+        '✅';
+
+    }
+
+
+    if (
+      data.order_status ===
+      'processing'
+    ) {
+
+      statusText =
+        'Pesanan sedang diproses';
+
+      statusIcon =
+        '⚙️';
+
+    }
+
+
+    if (
+      data.order_status ===
+      'completed'
+    ) {
+
+      statusText =
+        'Pesanan selesai';
+
+      statusIcon =
+        '🎉';
+
+    }
+
+
+    content.innerHTML = `
+
+      <h1>
+        Detail Pesanan
+      </h1>
+
+      <div class="subtitle">
+        Pantau status pesanan kamu di sini.
+      </div>
+
+
+      <div class="status">
+
+        <div class="status-icon">
+          ${statusIcon}
+        </div>
+
+        <strong>
+          ${statusText}
+        </strong>
+
+      </div>
+
+
+      <div class="order-code">
+
+        <small>
+          Order ID
+        </small>
+
+        <strong>
+          ${escapeHTML(
+            data.order_code
+          )}
+        </strong>
+
+      </div>
+
+
+      <div class="row">
+
+        <span>
+          Produk
+        </span>
+
+        <strong>
+          ${escapeHTML(
+            productName
+          )}
+        </strong>
+
+      </div>
+
+
+      <div class="row">
+
+        <span>
+          Tujuan
+        </span>
+
+        <strong>
+          ${escapeHTML(
+            data.destination
+          )}
+        </strong>
+
+      </div>
+
+
+      <div class="row">
+
+        <span>
+          Harga
+        </span>
+
+        <strong>
+          ${formatIDR(
+            data.price_idr
+          )}
+        </strong>
+
+      </div>
+
+
+      <div class="row">
+
+        <span>
+          USD
+        </span>
+
+        <strong>
+          ${
+            data.price_usd
+              ? '$' +
+                Number(
+                  data.price_usd
+                ).toFixed(2)
+              : '-'
+          }
+        </strong>
+
+      </div>
+
+
+      <div class="row">
+
+        <span>
+          Pembayaran
+        </span>
+
+        <strong>
+          ${escapeHTML(
+            data.payment_method
+          )}
+        </strong>
+
+      </div>
+
+
+      ${
+        data.payment_status === 'pending'
+        ? `
+          <button
+            class="pay-button"
+            onclick="startPayment()"
+          >
+            Bayar Sekarang
+          </button>
+
+          <div class="message">
+            Sistem akan memverifikasi pembayaran
+            secara otomatis.
+          </div>
+        `
+        : ''
+      }
+
+    `;
+
+  }
+
+
+  window.startPayment =
+    function () {
+
+      alert(
+        'Payment gateway akan kita sambungkan pada tahap berikutnya.'
+      );
+
+    };
+
+
+  loadOrder();
+
+</script>
+
+</body>
+</html>
