@@ -43,7 +43,7 @@
     }
 
     main {
-      padding: 22px 0;
+      padding: 22px 0 50px;
     }
 
     .card {
@@ -120,6 +120,87 @@
       text-align: right;
     }
 
+    .payment-box {
+      margin-top: 22px;
+      padding: 18px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+    }
+
+    .payment-box h2 {
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+
+    .payment-description {
+      color: #64748b;
+      font-size: 12px;
+      line-height: 1.5;
+      margin-bottom: 15px;
+    }
+
+    .payment-address {
+      background: white;
+      border: 1px dashed #cbd5e1;
+      padding: 13px;
+      border-radius: 11px;
+      word-break: break-all;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .copy-button {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      background: white;
+      color: #334155;
+      padding: 11px;
+      border-radius: 10px;
+      margin-top: 9px;
+      font-weight: 700;
+    }
+
+    .amount {
+      font-size: 22px;
+      font-weight: 900;
+      margin: 12px 0;
+    }
+
+    .network {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #0369a1;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .form-group {
+      margin-top: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 7px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #dbe1e8;
+      border-radius: 11px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #2563eb;
+    }
+
     .pay-button {
       width: 100%;
       border: 0;
@@ -127,19 +208,32 @@
       color: white;
       padding: 14px;
       border-radius: 12px;
-      font-weight: 800;
-      margin-top: 20px;
+      font-weight: 900;
+      margin-top: 18px;
     }
 
     .pay-button:disabled {
       background: #cbd5e1;
+      cursor: not-allowed;
     }
 
     .message {
       text-align: center;
       color: #64748b;
-      font-size: 13px;
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+
+    .success {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      padding: 14px;
+      border-radius: 12px;
       margin-top: 15px;
+      text-align: center;
+      font-size: 13px;
     }
 
     .error {
@@ -168,11 +262,9 @@
   <div class="container">
 
     <div id="content" class="card">
-
       <div style="text-align:center">
         Memuat pesanan...
       </div>
-
     </div>
 
   </div>
@@ -181,94 +273,152 @@
 
 <script type="module">
 
-  import {
-    createClient
-  } from
-  'https://esm.sh/@supabase/supabase-js@2';
+import {
+  createClient
+} from
+'https://esm.sh/@supabase/supabase-js@2';
 
 
-  const SUPABASE_URL =
-    'https://yteecjibmanhdxkdseod.supabase.co';
+const SUPABASE_URL =
+'https://yteecjibmanhdxkdseod.supabase.co';
 
-  const SUPABASE_KEY =
-    'sb_publishable_x4MDLBw3OBSS2HnyB2ssKg_UfWOS_H4';
-
-
-  const supabase =
-    createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+const SUPABASE_KEY =
+'sb_publishable_x4MDLBw3OBSS2HnyB2ssKg_UfWOS_H4';
 
 
-  const content =
-    document.getElementById(
-      'content'
-    );
+const supabase =
+createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 
-  function escapeHTML(value) {
-
-    return String(
-      value || ''
-    )
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-
-  }
+const content =
+document.getElementById(
+  'content'
+);
 
 
-  function formatIDR(value) {
-
-    return new Intl.NumberFormat(
-      'id-ID',
-      {
-        style: 'currency',
-        currency: 'IDR',
-        maximumFractionDigits: 0
-      }
-    ).format(
-      Number(value || 0)
-    );
-
-  }
+let currentOrder = null;
+let paymentSettings = null;
 
 
-  function getOrderCode() {
+/* =========================
+   HELPERS
+========================= */
 
-    const params =
-      new URLSearchParams(
-        window.location.search
-      );
+function escapeHTML(value) {
 
-    return params.get(
-      'order'
-    );
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 
-  }
-
-
-  async function loadOrder() {
-
-    const orderCode =
-      getOrderCode();
+}
 
 
-    if (!orderCode) {
+function formatIDR(value) {
 
-      content.innerHTML = `
-        <div class="error">
-          Order ID tidak ditemukan.
-        </div>
-      `;
-
-      return;
-
+  return new Intl.NumberFormat(
+    'id-ID',
+    {
+      style: 'currency',
+      currency: 'IDR',
+      maximumFractionDigits: 0
     }
+  ).format(
+    Number(value || 0)
+  );
 
+}
+
+
+function getOrderCode() {
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  return params.get('order');
+
+}
+
+
+/* =========================
+   LOAD PAYMENT SETTINGS
+========================= */
+
+async function loadPaymentSettings() {
+
+  const functionUrl =
+    SUPABASE_URL +
+    '/functions/v1/payment-settings';
+
+
+  const response =
+    await fetch(
+      functionUrl
+    );
+
+
+  if (!response.ok) {
+
+    throw new Error(
+      'Gagal mengambil payment settings.'
+    );
+
+  }
+
+
+  const result =
+    await response.json();
+
+
+  if (
+    !result.success ||
+    !result.data
+  ) {
+
+    throw new Error(
+      'Payment settings tidak tersedia.'
+    );
+
+  }
+
+
+  paymentSettings =
+    result.data;
+
+}
+
+
+/* =========================
+   LOAD ORDER
+========================= */
+
+async function loadOrder() {
+
+  const orderCode =
+    getOrderCode();
+
+
+  if (!orderCode) {
+
+    content.innerHTML = `
+      <div class="error">
+        Order ID tidak ditemukan.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  try {
 
     const {
       data,
@@ -309,227 +459,632 @@
 
     if (error) {
 
-      console.error(error);
-
-      content.innerHTML = `
-        <div class="error">
-          Pesanan tidak ditemukan.
-        </div>
-      `;
-
-      return;
+      throw error;
 
     }
 
 
-    const productName =
-      data.products
-        ? data.products.name
-        : '-';
+    currentOrder =
+      data;
 
 
-    let statusText =
-      'Menunggu pembayaran';
-
-    let statusIcon =
-      '💳';
+    await loadPaymentSettings();
 
 
-    if (
-      data.payment_status ===
-      'paid'
-    ) {
-
-      statusText =
-        'Pembayaran diterima';
-
-      statusIcon =
-        '✅';
-
-    }
+    renderOrder();
 
 
-    if (
-      data.order_status ===
-      'processing'
-    ) {
+  } catch (error) {
 
-      statusText =
-        'Pesanan sedang diproses';
-
-      statusIcon =
-        '⚙️';
-
-    }
-
-
-    if (
-      data.order_status ===
-      'completed'
-    ) {
-
-      statusText =
-        'Pesanan selesai';
-
-      statusIcon =
-        '🎉';
-
-    }
-
+    console.error(error);
 
     content.innerHTML = `
-
-      <h1>
-        Detail Pesanan
-      </h1>
-
-      <div class="subtitle">
-        Pantau status pesanan kamu di sini.
-      </div>
-
-
-      <div class="status">
-
-        <div class="status-icon">
-          ${statusIcon}
-        </div>
-
-        <strong>
-          ${statusText}
-        </strong>
-
-      </div>
-
-
-      <div class="order-code">
-
+      <div class="error">
+        Gagal memuat pesanan.
+        <br><br>
         <small>
-          Order ID
+          ${escapeHTML(
+            error.message
+          )}
         </small>
+      </div>
+    `;
 
-        <strong>
-          ${escapeHTML(
-            data.order_code
-          )}
-        </strong>
+  }
 
+}
+
+
+/* =========================
+   RENDER
+========================= */
+
+function renderOrder() {
+
+  const data =
+    currentOrder;
+
+
+  const productName =
+    data.products
+      ? data.products.name
+      : '-';
+
+
+  let statusText =
+    'Menunggu pembayaran';
+
+  let statusIcon =
+    '💳';
+
+
+  if (
+    data.payment_status === 'paid'
+  ) {
+
+    statusText =
+      'Pembayaran diterima';
+
+    statusIcon =
+      '✅';
+
+  }
+
+
+  if (
+    data.order_status === 'processing'
+  ) {
+
+    statusText =
+      'Pesanan sedang diproses';
+
+    statusIcon =
+      '⚙️';
+
+  }
+
+
+  if (
+    data.order_status === 'completed'
+  ) {
+
+    statusText =
+      'Pesanan selesai';
+
+    statusIcon =
+      '🎉';
+
+  }
+
+
+  content.innerHTML = `
+
+    <h1>
+      Detail Pesanan
+    </h1>
+
+    <div class="subtitle">
+      Pantau status pesanan kamu di sini.
+    </div>
+
+
+    <div class="status">
+
+      <div class="status-icon">
+        ${statusIcon}
       </div>
 
+      <strong>
+        ${statusText}
+      </strong>
 
-      <div class="row">
-
-        <span>
-          Produk
-        </span>
-
-        <strong>
-          ${escapeHTML(
-            productName
-          )}
-        </strong>
-
-      </div>
+    </div>
 
 
-      <div class="row">
+    <div class="order-code">
 
-        <span>
-          Tujuan
-        </span>
+      <small>
+        Order ID
+      </small>
 
-        <strong>
-          ${escapeHTML(
-            data.destination
-          )}
-        </strong>
+      <strong>
+        ${escapeHTML(
+          data.order_code
+        )}
+      </strong>
 
-      </div>
-
-
-      <div class="row">
-
-        <span>
-          Harga
-        </span>
-
-        <strong>
-          ${formatIDR(
-            data.price_idr
-          )}
-        </strong>
-
-      </div>
+    </div>
 
 
-      <div class="row">
-
-        <span>
-          USD
-        </span>
-
-        <strong>
-          ${
-            data.price_usd
-              ? '$' +
-                Number(
-                  data.price_usd
-                ).toFixed(2)
-              : '-'
-          }
-        </strong>
-
-      </div>
+    <div class="row">
+      <span>Produk</span>
+      <strong>
+        ${escapeHTML(
+          productName
+        )}
+      </strong>
+    </div>
 
 
-      <div class="row">
-
-        <span>
-          Pembayaran
-        </span>
-
-        <strong>
-          ${escapeHTML(
-            data.payment_method
-          )}
-        </strong>
-
-      </div>
+    <div class="row">
+      <span>Tujuan</span>
+      <strong>
+        ${escapeHTML(
+          data.destination
+        )}
+      </strong>
+    </div>
 
 
-      ${
-        data.payment_status === 'pending'
-        ? `
-          <button
-            class="pay-button"
-            onclick="startPayment()"
-          >
-            Bayar Sekarang
-          </button>
+    <div class="row">
+      <span>Harga</span>
+      <strong>
+        ${formatIDR(
+          data.price_idr
+        )}
+      </strong>
+    </div>
 
-          <div class="message">
-            Sistem akan memverifikasi pembayaran
-            secara otomatis.
-          </div>
-        `
+
+    <div class="row">
+      <span>USD</span>
+      <strong>
+        ${
+          data.price_usd
+            ? '$' +
+              Number(
+                data.price_usd
+              ).toFixed(2)
+            : '-'
+        }
+      </strong>
+    </div>
+
+
+    <div class="row">
+      <span>Pembayaran</span>
+      <strong>
+        ${escapeHTML(
+          data.payment_method
+        )}
+      </strong>
+    </div>
+
+
+    ${
+      data.payment_status === 'pending'
+        ? renderPaymentBox()
         : ''
-      }
+    }
 
+  `;
+
+}
+
+
+/* =========================
+   PAYMENT BOX
+========================= */
+
+function renderPaymentBox() {
+
+  if (
+    !paymentSettings ||
+    paymentSettings.length === 0
+  ) {
+
+    return `
+      <div class="payment-box">
+        <strong>
+          Metode pembayaran belum tersedia.
+        </strong>
+      </div>
     `;
 
   }
 
 
-  window.startPayment =
-    function () {
+  const method =
+    String(
+      currentOrder.payment_method || ''
+    ).toLowerCase();
 
-      alert(
-        'Payment gateway akan kita sambungkan pada tahap berikutnya.'
+
+  let setting = null;
+
+
+  if (
+    method === 'paypal'
+  ) {
+
+    setting =
+      paymentSettings.find(
+        item =>
+          item.payment_method ===
+          'paypal'
       );
 
-    };
+  }
 
 
-  loadOrder();
+  if (
+    method === 'crypto'
+  ) {
+
+    setting =
+      paymentSettings.find(
+        item =>
+          item.payment_method ===
+          'crypto' &&
+          item.currency ===
+          'USDT'
+      );
+
+  }
+
+
+  if (!setting) {
+
+    return `
+      <div class="payment-box">
+        Metode pembayaran tidak tersedia.
+      </div>
+    `;
+
+  }
+
+
+  if (
+    method === 'paypal'
+  ) {
+
+    return renderPayPal(
+      setting
+    );
+
+  }
+
+
+  return renderUSDT(
+    setting
+  );
+
+}
+
+
+/* =========================
+   PAYPAL
+========================= */
+
+function renderPayPal(setting) {
+
+  const amount =
+    Number(
+      currentOrder.price_usd || 0
+    ).toFixed(2);
+
+
+  return `
+
+    <div class="payment-box">
+
+      <h2>
+        💳 Bayar dengan PayPal
+      </h2>
+
+      <div class="payment-description">
+
+        Kirim pembayaran sesuai jumlah
+        di bawah ke alamat PayPal CryptoPulsa.
+
+      </div>
+
+
+      <div class="amount">
+        $${amount} USD
+      </div>
+
+
+      <div class="payment-description">
+        Alamat PayPal:
+      </div>
+
+
+      <div class="payment-address">
+        ${escapeHTML(
+          setting.payment_address
+        )}
+      </div>
+
+
+      <button
+        class="copy-button"
+        onclick="copyAddress(
+          '${escapeJS(
+            setting.payment_address
+          )}'
+        )"
+      >
+        📋 Salin Alamat PayPal
+      </button>
+
+
+      <div class="form-group">
+
+        <label>
+          PayPal Transaction ID
+        </label>
+
+        <input
+          id="transactionId"
+          type="text"
+          placeholder="Masukkan Transaction ID"
+        >
+
+      </div>
+
+
+      <button
+        class="pay-button"
+        onclick="submitPaymentProof()"
+      >
+        SAYA SUDAH BAYAR
+      </button>
+
+
+      <div class="message">
+
+        Setelah pembayaran, masukkan
+        Transaction ID PayPal untuk verifikasi.
+
+      </div>
+
+      <div id="paymentResult"></div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================
+   USDT
+========================= */
+
+function renderUSDT(setting) {
+
+  const amount =
+    Number(
+      currentOrder.price_usd || 0
+    ).toFixed(2);
+
+
+  return `
+
+    <div class="payment-box">
+
+      <h2>
+        ₿ Bayar dengan USDT
+      </h2>
+
+      <div class="payment-description">
+
+        Kirim USDT sesuai jumlah di bawah.
+
+      </div>
+
+
+      <div class="amount">
+        ${amount} USDT
+      </div>
+
+
+      <div class="network">
+        Network: ${escapeHTML(
+          setting.network
+        )}
+      </div>
+
+
+      <div class="payment-description">
+        Wallet penerima:
+      </div>
+
+
+      <div class="payment-address">
+        ${escapeHTML(
+          setting.payment_address
+        )}
+      </div>
+
+
+      <button
+        class="copy-button"
+        onclick="copyAddress(
+          '${escapeJS(
+            setting.payment_address
+          )}'
+        )"
+      >
+        📋 Salin Wallet
+      </button>
+
+
+      <div class="form-group">
+
+        <label>
+          Transaction Hash
+        </label>
+
+        <input
+          id="transactionId"
+          type="text"
+          placeholder="Masukkan TX Hash"
+        >
+
+      </div>
+
+
+      <button
+        class="pay-button"
+        onclick="submitPaymentProof()"
+      >
+        SAYA SUDAH BAYAR
+      </button>
+
+
+      <div class="message">
+
+        Setelah pembayaran, masukkan
+        Transaction Hash untuk verifikasi.
+
+      </div>
+
+
+      <div id="paymentResult"></div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================
+   COPY
+========================= */
+
+window.copyAddress =
+async function(address) {
+
+  try {
+
+    await navigator
+      .clipboard
+      .writeText(address);
+
+    alert(
+      'Alamat berhasil disalin.'
+    );
+
+  } catch {
+
+    alert(
+      'Gagal menyalin alamat.'
+    );
+
+  }
+
+};
+
+
+/* =========================
+   SUBMIT PAYMENT PROOF
+========================= */
+
+window.submitPaymentProof =
+async function() {
+
+  const input =
+    document.getElementById(
+      'transactionId'
+    );
+
+
+  const result =
+    document.getElementById(
+      'paymentResult'
+    );
+
+
+  if (
+    !input ||
+    !input.value.trim()
+  ) {
+
+    alert(
+      'Masukkan Transaction ID / TX Hash.'
+    );
+
+    return;
+
+  }
+
+
+  const transactionId =
+    input.value.trim();
+
+
+  /*
+    UNTUK SEKARANG:
+    Kita baru menyimpan bukti pembayaran.
+
+    VERIFIKASI OTOMATIS akan dibuat
+    di backend pada tahap berikutnya.
+  */
+
+
+  result.innerHTML = `
+
+    <div class="success">
+
+      ✅ Bukti pembayaran diterima.
+
+      <br><br>
+
+      Transaction ID:
+
+      <strong>
+        ${escapeHTML(
+          transactionId
+        )}
+      </strong>
+
+      <br><br>
+
+      Status masih:
+      <strong>
+        Menunggu verifikasi
+      </strong>
+
+    </div>
+
+  `;
+
+};
+
+
+/* =========================
+   ESCAPE JS
+========================= */
+
+function escapeJS(value) {
+
+  return String(
+    value || ''
+  )
+  .replace(
+    /\\/g,
+    '\\\\'
+  )
+  .replace(
+    /'/g,
+    "\\'"
+  )
+  .replace(
+    /"/g,
+    '\\"'
+  );
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadOrder();
 
 </script>
 
