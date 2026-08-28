@@ -1,1728 +1,1842 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>CryptoPulsa — Pulsa & Saldo Digital 24 Jam</title>
-
-<meta name="description" content="CryptoPulsa - Pulsa dan saldo digital otomatis 24 jam.">
-
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-
-:root{
---primary:#2563eb;
---primary-dark:#1d4ed8;
---dark:#111827;
---text:#111827;
---muted:#64748b;
---bg:#f5f7fb;
---card:#fff;
---border:#e5e7eb;
---success:#16a34a;
---danger:#dc2626
-}
-
-body{
-font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-background:var(--bg);
-color:var(--text);
-min-height:100vh
-}
-
-button,input{font:inherit}
-button{cursor:pointer}
-
-.container{
-width:min(1120px,calc(100% - 30px));
-margin:auto
-}
-
-header{
-background:rgba(255,255,255,.96);
-border-bottom:1px solid var(--border);
-position:sticky;
-top:0;
-z-index:50;
-backdrop-filter:blur(12px)
-}
-
-.nav{
-min-height:66px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:15px
-}
-
-.logo{
-font-size:21px;
-font-weight:900;
-letter-spacing:-.8px
-}
-
-.logo span{color:var(--primary)}
-
-.online{
-display:flex;
-align-items:center;
-gap:7px;
-color:var(--success);
-font-size:13px;
-font-weight:700
-}
-
-.online-dot{
-width:8px;
-height:8px;
-background:#22c55e;
-border-radius:50%;
-box-shadow:0 0 0 4px rgba(34,197,94,.12)
-}
-
-.hero{padding:25px 0 18px}
-
-.hero-card{
-position:relative;
-overflow:hidden;
-background:var(--dark);
-color:white;
-border-radius:25px;
-padding:38px
-}
-
-.hero-card:before{
-content:"";
-position:absolute;
-width:280px;
-height:280px;
-border-radius:50%;
-background:rgba(37,99,235,.28);
-right:-100px;
-top:-130px
-}
-
-.hero-card:after{
-content:"";
-position:absolute;
-width:160px;
-height:160px;
-border-radius:50%;
-background:rgba(59,130,246,.12);
-right:120px;
-bottom:-100px
-}
-
-.hero-content{
-position:relative;
-z-index:2;
-max-width:700px
-}
-
-.hero h1{
-font-size:clamp(30px,6vw,48px);
-line-height:1.05;
-letter-spacing:-1.7px
-}
-
-.hero p{
-color:#cbd5e1;
-line-height:1.6;
-margin-top:15px;
-max-width:600px
-}
-
-.hero-badges{
-display:flex;
-flex-wrap:wrap;
-gap:9px;
-margin-top:22px
-}
-
-.hero-badge{
-padding:8px 13px;
-border-radius:999px;
-background:rgba(255,255,255,.09);
-border:1px solid rgba(255,255,255,.1);
-font-size:12px
-}
-
-.service-bar{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:12px;
-margin:15px 0 30px
-}
-
-.service-item{
-background:white;
-border:1px solid var(--border);
-border-radius:15px;
-padding:15px;
-display:flex;
-gap:12px;
-align-items:center
-}
-
-.service-icon{
-width:40px;
-height:40px;
-background:#eff6ff;
-border-radius:12px;
-display:grid;
-place-items:center;
-font-size:18px;
-flex-shrink:0
-}
-
-.service-item strong{
-font-size:13px;
-display:block
-}
-
-.service-item span{
-display:block;
-margin-top:3px;
-font-size:11px;
-color:var(--muted)
-}
-
-.section{padding-bottom:60px}
-
-.section-header{margin-bottom:18px}
-
-.section-header h2{
-font-size:24px;
-letter-spacing:-.7px
-}
-
-.section-header p{
-color:var(--muted);
-font-size:14px;
-margin-top:5px
-}
-
-.products{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:16px
-}
-
-.product-card{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:19px;
-padding:18px;
-transition:.2s
-}
-
-.product-card:hover{
-transform:translateY(-2px);
-box-shadow:0 12px 35px rgba(15,23,42,.07)
-}
-
-.product-icon{
-width:50px;
-height:50px;
-background:#eff6ff;
-border-radius:15px;
-display:grid;
-place-items:center;
-font-size:24px;
-margin-bottom:14px
-}
-
-.product-card h3{font-size:17px}
-
-.product-description{
-color:var(--muted);
-font-size:13px;
-margin-top:5px
-}
-
-.variants-title{
-font-size:11px;
-color:var(--muted);
-font-weight:800;
-letter-spacing:.6px;
-text-transform:uppercase;
-margin-top:18px;
-margin-bottom:8px
-}
-
-.variant{
-border:1px solid var(--border);
-border-radius:14px;
-padding:13px;
-margin-top:8px
-}
-
-.variant-top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px
-}
-
-.nominal{
-font-size:15px;
-font-weight:900
-}
-
-.available{
-color:var(--success);
-font-size:10px;
-font-weight:800
-}
-
-.unavailable{color:var(--danger)}
-
-.price{
-font-size:17px;
-font-weight:900;
-margin-top:9px
-}
-
-.price-usd{
-color:var(--muted);
-font-size:12px;
-margin-top:2px
-}
-
-.buy-button{
-width:100%;
-border:0;
-background:var(--primary);
-color:white;
-border-radius:11px;
-padding:11px;
-margin-top:11px;
-font-weight:800
-}
-
-.buy-button:hover{background:var(--primary-dark)}
-
-.buy-button:disabled{
-background:#cbd5e1;
-cursor:not-allowed
-}
-
-.loading,.empty,.error{
-grid-column:1/-1;
-background:white;
-border:1px solid var(--border);
-border-radius:17px;
-padding:28px;
-text-align:center;
-color:var(--muted)
-}
-
-/* CHECKOUT */
-
-.modal{
-position:fixed;
-inset:0;
-background:rgba(15,23,42,.68);
-z-index:100;
-display:none;
-align-items:center;
-justify-content:center;
-padding:18px;
-backdrop-filter:blur(4px)
-}
-
-.modal.show{display:flex}
-
-.modal-box{
-width:min(480px,100%);
-max-height:92vh;
-overflow-y:auto;
-background:white;
-border-radius:24px;
-padding:25px;
-position:relative;
-box-shadow:0 25px 70px rgba(0,0,0,.25)
-}
-
-.modal-close{
-position:absolute;
-right:14px;
-top:11px;
-width:35px;
-height:35px;
-border:0;
-border-radius:50%;
-background:#f1f5f9;
-color:#475569;
-font-size:23px
-}
-
-.modal-box h2{
-font-size:24px;
-letter-spacing:-.6px
-}
-
-.checkout-product{
-color:var(--muted);
-margin-top:5px;
-margin-bottom:20px;
-font-size:14px
-}
-
-.checkout-highlight{
-display:flex;
-align-items:center;
-gap:12px;
-background:#eff6ff;
-border:1px solid #dbeafe;
-border-radius:15px;
-padding:13px;
-margin-bottom:18px
-}
-
-.checkout-highlight-icon{
-width:40px;
-height:40px;
-border-radius:12px;
-background:white;
-display:grid;
-place-items:center;
-font-size:19px
-}
-
-.checkout-highlight small{
-display:block;
-color:#64748b;
-font-size:11px
-}
-
-.checkout-highlight strong{
-display:block;
-margin-top:2px;
-font-size:14px
-}
-
-.form-group{margin-top:15px}
-
-.form-group label{
-display:block;
-font-size:12px;
-font-weight:800;
-margin-bottom:7px
-}
-
-.form-group label span{
-color:#94a3b8;
-font-weight:500
-}
-
-.form-control{
-width:100%;
-padding:13px;
-border:1px solid #dbe1e8;
-border-radius:11px;
-outline:none;
-background:white
-}
-
-.form-control:focus{
-border-color:var(--primary);
-box-shadow:0 0 0 3px rgba(37,99,235,.08)
-}
-
-.payment-options{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px
-}
-
-.payment-option{position:relative}
-
-.payment-option input{
-position:absolute;
-opacity:0;
-pointer-events:none
-}
-
-.payment-label{
-display:block;
-border:1px solid #dbe1e8;
-border-radius:14px;
-padding:14px;
-cursor:pointer;
-background:white;
-transition:.15s
-}
-
-.payment-label:hover{border-color:#93c5fd}
-
-.payment-option input:checked+.payment-label{
-border-color:var(--primary);
-background:#eff6ff;
-box-shadow:0 0 0 2px rgba(37,99,235,.08)
-}
-
-.payment-icon{
-font-size:20px;
-margin-bottom:7px
-}
-
-.payment-label strong{
-display:block;
-font-size:13px
-}
-
-.payment-label span{
-display:block;
-color:var(--muted);
-font-size:10px;
-margin-top:3px
-}
-
-.summary{
-background:#f8fafc;
-border-radius:15px;
-padding:15px;
-margin-top:20px;
-border:1px solid #f1f5f9
-}
-
-.summary-row{
-display:flex;
-justify-content:space-between;
-gap:15px;
-margin:7px 0;
-font-size:13px
-}
-
-.summary-row span{color:var(--muted)}
-
-.summary-row strong{text-align:right}
-
-.summary-total{
-border-top:1px solid #e2e8f0;
-margin-top:10px;
-padding-top:10px
-}
-
-.summary-total strong{font-size:16px}
-
-.submit-button{
-width:100%;
-border:0;
-background:var(--primary);
-color:white;
-border-radius:12px;
-padding:15px;
-margin-top:18px;
-font-weight:900;
-box-shadow:0 8px 20px rgba(37,99,235,.18)
-}
-
-.submit-button:hover{background:var(--primary-dark)}
-
-.submit-button:disabled{
-opacity:.6;
-cursor:wait
-}
-
-.result{margin-top:16px}
-
-.success-box{
-background:#f0fdf4;
-border:1px solid #bbf7d0;
-color:#166534;
-border-radius:14px;
-padding:16px;
-text-align:center
-}
-
-.order-code{
-font-size:20px;
-font-weight:900;
-margin:8px 0;
-letter-spacing:.5px
-}
-
-footer{
-background:white;
-border-top:1px solid var(--border);
-padding:25px 0;
-text-align:center;
-color:var(--muted);
-font-size:12px
-}
-
-@media(max-width:850px){
-.products{
-grid-template-columns:repeat(2,1fr)
-}
-}
-
-@media(max-width:600px){
-
-.container{
-width:min(100% - 22px,500px)
-}
-
-.nav{min-height:60px}
-
-.logo{font-size:19px}
-
-.hero{padding-top:14px}
-
-.hero-card{
-padding:26px 21px;
-border-radius:21px
-}
-
-.hero h1{font-size:31px}
-
-.hero p{font-size:13px}
-
-.hero-badge{font-size:11px}
-
-.service-bar{
-grid-template-columns:1fr
-}
-
-.service-item{padding:13px}
-
-.products{
-grid-template-columns:1fr
-}
-
-.section{padding-bottom:40px}
-
-.modal{
-align-items:flex-end;
-padding:0
-}
-
-.modal-box{
-width:100%;
-border-radius:22px 22px 0 0;
-max-height:92vh
-}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>CryptoPulsa — Pulsa & Saldo Digital 24 Jam</title>
+
+  <meta
+    name="description"
+    content="CryptoPulsa - Pulsa dan saldo digital otomatis 24 jam."
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --dark: #111827;
+      --text: #111827;
+      --muted: #64748b;
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --border: #e5e7eb;
+      --success: #16a34a;
+      --danger: #dc2626;
+    }
+
+    body {
+      font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 30px));
+      margin: auto;
+    }
+
+    header {
+      background: rgba(255,255,255,.95);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+    }
+
+    .nav {
+      min-height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: -.8px;
+    }
+
+    .logo span {
+      color: var(--primary);
+    }
+
+    .online {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--success);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .online-dot {
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px rgba(34,197,94,.12);
+    }
+
+    .hero {
+      padding: 25px 0 18px;
+    }
+
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--dark);
+      color: white;
+      border-radius: 25px;
+      padding: 38px;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: rgba(37,99,235,.28);
+      right: -100px;
+      top: -130px;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: rgba(59,130,246,.12);
+      right: 120px;
+      bottom: -100px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+    }
+
+    .hero h1 {
+      font-size: clamp(30px, 6vw, 48px);
+      line-height: 1.05;
+      letter-spacing: -1.7px;
+    }
+
+    .hero p {
+      color: #cbd5e1;
+      line-height: 1.6;
+      margin-top: 15px;
+      max-width: 600px;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 22px;
+    }
+
+    .hero-badge {
+      padding: 8px 13px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.09);
+      border: 1px solid rgba(255,255,255,.1);
+      font-size: 12px;
+    }
+
+    .service-bar {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 12px;
+      margin: 15px 0 30px;
+    }
+
+    .service-item {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 15px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .service-icon {
+      width: 40px;
+      height: 40px;
+      background: #eff6ff;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .service-item strong {
+      font-size: 13px;
+      display: block;
+    }
+
+    .service-item span {
+      display: block;
+      margin-top: 3px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .section {
+      padding-bottom: 60px;
+    }
+
+    .section-header {
+      margin-bottom: 18px;
+    }
+
+    .section-header h2 {
+      font-size: 24px;
+      letter-spacing: -.7px;
+    }
+
+    .section-header p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 16px;
+    }
+
+    .product-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 19px;
+      padding: 18px;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(15,23,42,.07);
+    }
+
+    .product-icon {
+      width: 50px;
+      height: 50px;
+      background: #eff6ff;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      margin-bottom: 14px;
+    }
+
+    .product-card h3 {
+      font-size: 17px;
+    }
+
+    .product-description {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    .variants-title {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 800;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+
+    .variant {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 13px;
+      margin-top: 8px;
+    }
+
+    .variant-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nominal {
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .available {
+      color: var(--success);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .unavailable {
+      color: var(--danger);
+    }
+
+    .price {
+      font-size: 17px;
+      font-weight: 900;
+      margin-top: 9px;
+    }
+
+    .price-usd {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .buy-button {
+      width: 100%;
+      border: 0;
+      background: var(--primary);
+      color: white;
+      border-radius: 11px;
+      padding: 11px;
+      margin-top: 11px;
+      font-weight: 800;
+    }
+
+    .buy-button:hover {
+      background: var(--primary-dark);
+    }
+
+    .buy-button:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+    }
+
+    .loading,
+    .empty,
+    .error {
+      grid-column: 1 / -1;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      padding: 28px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,.68);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-box {
+      width: min(480px, 100%);
+      max-height: 92vh;
+      overflow-y: auto;
+      background: white;
+      border-radius: 24px;
+      padding: 25px;
+      position: relative;
+      box-shadow: 0 25px 70px rgba(0,0,0,.25);
+    }
+
+    .modal-close {
+      position: absolute;
+      right: 14px;
+      top: 11px;
+      width: 35px;
+      height: 35px;
+      border: 0;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 23px;
+    }
+
+    .modal-box h2 {
+      font-size: 24px;
+      letter-spacing: -.6px;
+    }
+
+    .checkout-product {
+      color: var(--muted);
+      margin-top: 5px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .checkout-highlight {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #eff6ff;
+      border: 1px solid #dbeafe;
+      border-radius: 15px;
+      padding: 13px;
+      margin-bottom: 18px;
+    }
+
+    .checkout-highlight-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: white;
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+    }
+
+    .checkout-highlight small {
+      display: block;
+      color: #64748b;
+      font-size: 11px;
+    }
+
+    .checkout-highlight strong {
+      display: block;
+      margin-top: 2px;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-top: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 7px;
+    }
+
+    .form-group label span {
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #dbe1e8;
+      border-radius: 11px;
+      outline: none;
+      background: white;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37,99,235,.08);
+    }
+
+    .payment-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .payment-option {
+      position: relative;
+    }
+
+    .payment-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .payment-label {
+      display: block;
+      border: 1px solid #dbe1e8;
+      border-radius: 14px;
+      padding: 14px;
+      cursor: pointer;
+      transition: .15s;
+      background: white;
+    }
+
+    .payment-label:hover {
+      border-color: #93c5fd;
+    }
+
+    .payment-option input:checked + .payment-label {
+      border-color: var(--primary);
+      background: #eff6ff;
+      box-shadow: 0 0 0 2px rgba(37,99,235,.08);
+    }
+
+    .payment-icon {
+      font-size: 20px;
+      margin-bottom: 7px;
+    }
+
+    .payment-label strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .payment-label span {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 3px;
+    }
+
+    .summary {
+      background: #f8fafc;
+      border-radius: 15px;
+      padding: 15px;
+      margin-top: 20px;
+      border: 1px solid #f1f5f9;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin: 7px 0;
+      font-size: 13px;
+    }
+
+    .summary-row span {
+      color: var(--muted);
+    }
+
+    .summary-row strong {
+      text-align: right;
+    }
+
+    .summary-total {
+      border-top: 1px solid #e2e8f0;
+      margin-top: 10px;
+      padding-top: 10px;
+    }
+
+    .summary-total strong {
+      font-size: 16px;
+    }
+
+    .submit-button {
+      width: 100%;
+      border: 0;
+      background: var(--primary);
+      color: white;
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 18px;
+      font-weight: 900;
+      box-shadow: 0 8px 20px rgba(37,99,235,.18);
+    }
+
+    .submit-button:hover {
+      background: var(--primary-dark);
+    }
+
+    .submit-button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .result {
+      margin-top: 16px;
+    }
+
+    .success-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .order-code {
+      font-size: 20px;
+      font-weight: 900;
+      margin: 8px 0;
+      letter-spacing: .5px;
+    }
+
+    footer {
+      background: white;
+      border-top: 1px solid var(--border);
+      padding: 25px 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 850px) {
+
+      .products {
+        grid-template-columns: repeat(2,1fr);
+      }
+
+    }
+
+    @media (max-width: 600px) {
+
+      .container {
+        width: min(100% - 22px, 500px);
+      }
+
+      .nav {
+        min-height: 60px;
+      }
+
+      .logo {
+        font-size: 19px;
+      }
+
+      .hero {
+        padding-top: 14px;
+      }
+
+      .hero-card {
+        padding: 26px 21px;
+        border-radius: 21px;
+      }
+
+      .hero h1 {
+        font-size: 31px;
+      }
+
+      .hero p {
+        font-size: 13px;
+      }
+
+      .hero-badge {
+        font-size: 11px;
+      }
+
+      .service-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .service-item {
+        padding: 13px;
+      }
+
+      .products {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding-bottom: 40px;
+      }
+
+      .modal {
+        align-items: flex-end;
+        padding: 0;
+      }
+
+      .modal-box {
+        width: 100%;
+        border-radius: 22px 22px 0 0;
+        max-height: 92vh;
+      }
+
+      .payment-options {
+        grid-template-columns: 1fr 1fr;
+      }
+
+    }
+  </style>
 </head>
 
 <body>
 
 <header>
-<div class="container nav">
 
-<div class="logo">
-Crypto<span>Pulsa</span>
-</div>
+  <div class="container nav">
 
-<div class="online">
-<span class="online-dot"></span>
-Online 24 Jam
-</div>
+    <div class="logo">
+      Crypto<span>Pulsa</span>
+    </div>
 
-</div>
+    <div class="online">
+      <span class="online-dot"></span>
+      Online 24 Jam
+    </div>
+
+  </div>
+
 </header>
+
 
 <main>
 
-<section class="hero">
+  <section class="hero">
 
-<div class="container">
+    <div class="container">
 
-<div class="hero-card">
+      <div class="hero-card">
 
-<div class="hero-content">
+        <div class="hero-content">
 
-<h1>
-Pulsa & Saldo Digital,
-Otomatis 24 Jam.
-</h1>
+          <h1>
+            Pulsa & Saldo Digital,
+            Otomatis 24 Jam.
+          </h1>
 
-<p>
-Tukarkan saldo digital menjadi pulsa,
-e-wallet dan produk digital dengan proses
-cepat. Tanpa register dan tanpa login.
-</p>
+          <p>
+            Tukarkan saldo digital menjadi pulsa,
+            e-wallet dan produk digital dengan proses
+            cepat. Tanpa register dan tanpa login.
+          </p>
 
-<div class="hero-badges">
+          <div class="hero-badges">
 
-<div class="hero-badge">⚡ Otomatis</div>
-<div class="hero-badge">🕐 24 Jam</div>
-<div class="hero-badge">₿ Crypto</div>
-<div class="hero-badge">💳 PayPal</div>
+            <div class="hero-badge">
+              ⚡ Otomatis
+            </div>
 
-</div>
+            <div class="hero-badge">
+              🕐 24 Jam
+            </div>
 
-</div>
+            <div class="hero-badge">
+              ₿ Crypto
+            </div>
 
-</div>
+            <div class="hero-badge">
+              💳 PayPal
+            </div>
 
-</div>
+          </div>
 
-</section>
+        </div>
 
-<div class="container">
+      </div>
 
-<div class="service-bar">
+    </div>
 
-<div class="service-item">
-<div class="service-icon">⚡</div>
-<div>
-<strong>Proses Otomatis</strong>
-<span>Pesanan diproses sistem</span>
-</div>
-</div>
+  </section>
 
-<div class="service-item">
-<div class="service-icon">🕐</div>
-<div>
-<strong>Online 24 Jam</strong>
-<span>Transaksi kapan saja</span>
-</div>
-</div>
 
-<div class="service-item">
-<div class="service-icon">🔐</div>
-<div>
-<strong>Tanpa Register</strong>
-<span>Langsung checkout</span>
-</div>
-</div>
+  <div class="container">
 
-</div>
+    <div class="service-bar">
 
-<section class="section">
+      <div class="service-item">
 
-<div class="section-header">
+        <div class="service-icon">
+          ⚡
+        </div>
 
-<h2>Produk</h2>
+        <div>
+          <strong>Proses Otomatis</strong>
+          <span>Pesanan diproses sistem</span>
+        </div>
 
-<p>
-Pilih produk dan nominal yang kamu butuhkan.
-</p>
+      </div>
 
-</div>
 
-<div id="products" class="products">
+      <div class="service-item">
 
-<div class="loading">
-Memuat produk...
-</div>
+        <div class="service-icon">
+          🕐
+        </div>
 
-</div>
+        <div>
+          <strong>Online 24 Jam</strong>
+          <span>Transaksi kapan saja</span>
+        </div>
 
-</section>
+      </div>
 
-</div>
+
+      <div class="service-item">
+
+        <div class="service-icon">
+          🔐
+        </div>
+
+        <div>
+          <strong>Tanpa Register</strong>
+          <span>Langsung checkout</span>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <section class="section">
+
+      <div class="section-header">
+
+        <h2>Produk</h2>
+
+        <p>
+          Pilih produk dan nominal yang kamu butuhkan.
+        </p>
+
+      </div>
+
+
+      <div id="products" class="products">
+
+        <div class="loading">
+          Memuat produk...
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
 
 </main>
 
-<!-- CHECKOUT -->
 
 <div id="checkoutModal" class="modal">
 
-<div class="modal-box">
+  <div class="modal-box">
 
-<button
-class="modal-close"
-onclick="closeCheckout()"
-aria-label="Tutup"
-type="button"
->
-×
-</button>
+    <button
+      class="modal-close"
+      onclick="closeCheckout()"
+      aria-label="Tutup"
+    >
+      ×
+    </button>
 
-<h2>Checkout</h2>
+    <h2>Checkout</h2>
 
-<div id="checkoutProduct" class="checkout-product">
--
-</div>
+    <div
+      id="checkoutProduct"
+      class="checkout-product"
+    >
+      -
+    </div>
 
-<div class="checkout-highlight">
 
-<div class="checkout-highlight-icon">
-🛒
-</div>
+    <form id="checkoutForm">
 
-<div>
+      <div class="form-group">
 
-<small>Pesanan kamu</small>
+        <label>
+          Nomor tujuan
+        </label>
 
-<strong id="highlightProduct">
--
-</strong>
+        <input
+          id="destination"
+          class="form-control"
+          type="text"
+          inputmode="tel"
+          placeholder="08xxxxxxxxxx"
+          autocomplete="tel"
+          required
+        >
 
-</div>
+      </div>
 
-</div>
 
-<form id="checkoutForm">
+      <div class="form-group">
 
-<div class="form-group">
+        <label>
+          Nama <span>(opsional)</span>
+        </label>
 
-<label>
-Nomor tujuan
-</label>
+        <input
+          id="customerName"
+          class="form-control"
+          type="text"
+          placeholder="Nama kamu"
+          autocomplete="name"
+        >
 
-<input
-id="destination"
-class="form-control"
-type="text"
-inputmode="tel"
-placeholder="08xxxxxxxxxx"
-autocomplete="tel"
-required
->
+      </div>
 
-</div>
 
-<div class="form-group">
+      <div class="form-group">
 
-<label>
-Nama <span>(opsional)</span>
-</label>
+        <label>
+          Metode pembayaran
+        </label>
 
-<input
-id="customerName"
-class="form-control"
-type="text"
-placeholder="Nama kamu"
-autocomplete="name"
->
+        <select
+          id="paymentMethod"
+          class="form-control"
+          required
+        >
 
-</div>
+          <option value="">
+            Pilih pembayaran
+          </option>
 
-<div class="form-group">
+          <option value="crypto">
+            ₿ Crypto
+          </option>
 
-<label>
-Metode pembayaran
-</label>
+          <option value="paypal">
+            💳 PayPal
+          </option>
 
-<div class="payment-options">
+        </select>
 
-<div class="payment-option">
+      </div>
 
-<input
-type="radio"
-id="paymentCrypto"
-name="paymentMethod"
-value="crypto"
-required
->
 
-<label
-class="payment-label"
-for="paymentCrypto"
->
+      <div class="summary">
 
-<div class="payment-icon">
-₿
-</div>
+        <div class="summary-row">
 
-<strong>Crypto USDT</strong>
+          <span>Produk</span>
 
-<span>Pembayaran USDT</span>
+          <strong id="summaryProduct">
+            -
+          </strong>
 
-</label>
+        </div>
 
-</div>
 
-<div class="payment-option">
+        <div class="summary-row">
 
-<input
-type="radio"
-id="paymentPaypal"
-name="paymentMethod"
-value="paypal"
->
+          <span>Harga IDR</span>
 
-<label
-class="payment-label"
-for="paymentPaypal"
->
+          <strong id="checkoutPrice">
+            -
+          </strong>
 
-<div class="payment-icon">
-💳
-</div>
+        </div>
 
-<strong>PayPal</strong>
 
-<span>Pembayaran USD</span>
+        <div class="summary-row">
 
-</label>
+          <span>Harga USD</span>
 
-</div>
+          <strong id="checkoutUSD">
+            -
+          </strong>
 
-</div>
+        </div>
 
-</div>
+      </div>
 
-<div class="summary">
 
-<div class="summary-row">
+      <button
+        id="submitOrder"
+        class="submit-button"
+        type="submit"
+      >
+        Buat Pesanan
+      </button>
 
-<span>Produk</span>
+    </form>
 
-<strong id="summaryProduct">
--
-</strong>
+
+    <div
+      id="checkoutResult"
+      class="result"
+    ></div>
+
+  </div>
 
 </div>
 
-<div class="summary-row">
-
-<span>Harga IDR</span>
-
-<strong id="checkoutPrice">
--
-</strong>
-
-</div>
-
-<div class="summary-row summary-total">
-
-<span>Total USD</span>
-
-<strong id="checkoutUSD">
--
-</strong>
-
-</div>
-
-</div>
-
-<button
-id="submitOrder"
-class="submit-button"
-type="submit"
->
-🔒 Buat Pesanan
-</button>
-
-</form>
-
-<div id="checkoutResult" class="result"></div>
-
-</div>
-
-</div>
 
 <footer>
 
-<div class="container">
+  <div class="container">
 
-© 2026 CryptoPulsa —
-Pulsa & Saldo Digital Otomatis 24 Jam
+    © 2026 CryptoPulsa —
+    Pulsa & Saldo Digital Otomatis 24 Jam
 
-</div>
+  </div>
 
 </footer>
 
+
 <script type="module">
 
-import {
-createClient
-}
-from
-'https://esm.sh/@supabase/supabase-js@2';
-
-
-const SUPABASE_URL =
-'https://yteecjibmanhdxkdseod.supabase.co';
-
-const SUPABASE_KEY =
-'sb_publishable_x4MDLBw3OBSS2HnyB2ssKg_UfWOS_H4';
-
-const supabase =
-createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
-
-const productsContainer =
-document.getElementById(
-'products'
-);
-
-let selectedVariant = null;
-
-
-/* =========================
-   LOAD PRODUCTS
-========================= */
-
-async function loadProducts(){
-
-productsContainer.innerHTML = `
-<div class="loading">
-Memuat produk...
-</div>
-`;
-
-try{
-
-const {
-data,
-error
-} =
-await supabase
-.from('products')
-.select(`
-id,
-name,
-slug,
-category,
-description,
-image_url,
-product_variants (
-id,
-name,
-nominal,
-price_idr,
-price_usd,
-is_available,
-stock_status,
-product_id
-)
-`)
-.eq(
-'is_active',
-true
-)
-.order(
-'id',
-{ascending:true}
-);
-
-if(error){
-throw error;
-}
-
-if(!data || data.length === 0){
-
-productsContainer.innerHTML = `
-<div class="empty">
-Belum ada produk tersedia.
-</div>
-`;
-
-return;
-}
-
-productsContainer.innerHTML = '';
-
-data.forEach(product => {
-
-const card =
-document.createElement(
-'div'
-);
-
-card.className =
-'product-card';
-
+  import {
+    createClient
+  } from
+  'https://esm.sh/@supabase/supabase-js@2';
 
-/*
-Menghilangkan variant yang
-muncul lebih dari sekali dengan
-ID yang sama.
-*/
-
-const variants =
-Array.from(
-new Map(
-(product.product_variants || [])
-.map(
-variant => [
-variant.id,
-variant
-]
-)
-).values()
-);
-
-
-let variantsHTML = '';
-
-if(variants.length === 0){
-
-variantsHTML = `
-<div class="empty">
-Nominal belum tersedia.
-</div>
-`;
 
-}else{
+  const SUPABASE_URL =
+    'https://yteecjibmanhdxkdseod.supabase.co';
 
-variantsHTML =
-variants
-.map(
-variant => {
+  const SUPABASE_KEY =
+    'sb_publishable_x4MDLBw3OBSS2HnyB2ssKg_UfWOS_H4';
 
-const available =
-variant.is_available === true &&
-variant.stock_status !==
-'unavailable';
 
-return `
+  const supabase =
+    createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
 
-<div class="variant">
 
-<div class="variant-top">
+  const productsContainer =
+    document.getElementById('products');
 
-<div class="nominal">
-${formatNominal(
-variant.nominal
-)}
-</div>
 
-<div class="
-available
-${
-available
-? ''
-: 'unavailable'
-}
-">
+  let selectedVariant = null;
 
-${
-available
-? '● Tersedia'
-: 'Tidak tersedia'
-}
 
-</div>
+  /* =========================
+     LOAD PRODUCTS
+  ========================= */
 
-</div>
+  async function loadProducts() {
 
-<div class="price">
+    productsContainer.innerHTML = `
+      <div class="loading">
+        Memuat produk...
+      </div>
+    `;
 
-${formatIDR(
-variant.price_idr
-)}
 
-</div>
+    try {
 
-<div class="price-usd">
+      const {
+        data,
+        error
+      } = await supabase
 
-${
-variant.price_usd
-? '$' +
-Number(
-variant.price_usd
-).toFixed(2)
-: '-'
-}
+        .from('products')
 
-</div>
+        .select(`
+          id,
+          name,
+          slug,
+          category,
+          description,
+          image_url,
 
-<button
-class="buy-button"
-${
-available
-? ''
-: 'disabled'
-}
-data-variant-id="${
-variant.id
-}"
-type="button"
->
+          product_variants (
+            id,
+            name,
+            nominal,
+            price_idr,
+            price_usd,
+            is_available,
+            stock_status,
+            product_id
+          )
+        `)
 
-${
-available
-? 'Beli Sekarang'
-: 'Tidak Tersedia'
-}
+        .eq(
+          'is_active',
+          true
+        );
 
-</button>
 
-</div>
+      if (error) {
 
-`;
+        throw error;
 
-}
-)
-.join('');
+      }
 
-}
 
+      if (
+        !data ||
+        data.length === 0
+      ) {
 
-card.innerHTML = `
+        productsContainer.innerHTML = `
+          <div class="empty">
+            Belum ada produk tersedia.
+          </div>
+        `;
 
-<div class="product-icon">
+        return;
 
-${getIcon(
-product.category
-)}
+      }
 
-</div>
 
-<h3>
+      productsContainer.innerHTML = '';
 
-${escapeHTML(
-product.name
-)}
 
-</h3>
+      data.forEach(product => {
 
-<div class="product-description">
+        const card =
+          document.createElement(
+            'div'
+          );
 
-${escapeHTML(
-product.description || ''
-)}
+        card.className =
+          'product-card';
 
-</div>
 
-<div class="variants-title">
+        const variants =
+          product.product_variants || [];
 
-Pilih Nominal
 
-</div>
+        let variantsHTML = '';
 
-${variantsHTML}
 
-`;
+        if (
+          variants.length === 0
+        ) {
 
+          variantsHTML = `
+            <div class="empty">
+              Nominal belum tersedia.
+            </div>
+          `;
 
-productsContainer
-.appendChild(card);
+        } else {
 
-});
+          variantsHTML =
+            variants
 
+              .map(
+                variant => {
 
-document
-.querySelectorAll(
-'.buy-button'
-)
-.forEach(button => {
+                  const available =
+                    variant.is_available &&
+                    variant.stock_status !==
+                    'unavailable';
 
-button.addEventListener(
-'click',
-() => {
 
-openCheckout(
-Number(
-button.dataset
-.variantId
-)
-);
+                  return `
 
-}
-);
+                    <div class="variant">
 
-});
+                      <div class="variant-top">
 
+                        <div class="nominal">
 
-}catch(error){
+                          ${formatNominal(
+                            variant.nominal
+                          )}
 
-console.error(
-'Supabase error:',
-error
-);
+                        </div>
 
-productsContainer.innerHTML = `
+                        <div class="
+                          available
+                          ${available
+                            ? ''
+                            : 'unavailable'}
+                        ">
 
-<div class="error">
+                          ${
+                            available
+                              ? '● Tersedia'
+                              : 'Tidak tersedia'
+                          }
 
-Gagal memuat produk.
+                        </div>
 
-<br><br>
+                      </div>
 
-<small>
 
-${escapeHTML(
-error.message ||
-'Unknown error'
-)}
+                      <div class="price">
 
-</small>
+                        ${formatIDR(
+                          variant.price_idr
+                        )}
 
-</div>
+                      </div>
 
-`;
 
-}
+                      <div class="price-usd">
 
-}
+                        ${
+                          variant.price_usd
+                            ? '$' +
+                              Number(
+                                variant.price_usd
+                              ).toFixed(2)
+                            : '-'
+                        }
 
+                      </div>
 
-/* =========================
-   OPEN CHECKOUT
-========================= */
 
-async function openCheckout(
-variantId
-){
+                      <button
+                        class="buy-button"
+                        ${
+                          available
+                            ? ''
+                            : 'disabled'
+                        }
 
-try{
+                        data-variant-id="${
+                          variant.id
+                        }"
+                      >
 
-const {
-data,
-error
-} =
-await supabase
-.from(
-'product_variants'
-)
-.select(`
-id,
-name,
-nominal,
-price_idr,
-price_usd,
-product_id,
-products (
-name
-)
-`)
-.eq(
-'id',
-variantId
-)
-.single();
+                        ${
+                          available
+                            ? 'Beli Sekarang'
+                            : 'Tidak Tersedia'
+                        }
 
-if(error){
-throw error;
-}
+                      </button>
 
-selectedVariant =
-data;
+                    </div>
 
-const productName =
-data.products
-? data.products.name
-: data.name;
+                  `;
 
-const productLabel =
-productName +
-' — ' +
-formatNominal(
-data.nominal
-);
+                }
+              )
 
-document
-.getElementById(
-'checkoutProduct'
-)
-.textContent =
-productLabel;
+              .join('');
 
-document
-.getElementById(
-'highlightProduct'
-)
-.textContent =
-productLabel;
+        }
 
-document
-.getElementById(
-'summaryProduct'
-)
-.textContent =
-productLabel;
 
-document
-.getElementById(
-'checkoutPrice'
-)
-.textContent =
-formatIDR(
-data.price_idr
-);
+        card.innerHTML = `
 
-document
-.getElementById(
-'checkoutUSD'
-)
-.textContent =
-data.price_usd
-? '$' +
-Number(
-data.price_usd
-).toFixed(2)
-: '-';
+          <div class="product-icon">
 
-document
-.getElementById(
-'checkoutResult'
-)
-.innerHTML = '';
+            ${getIcon(
+              product.category
+            )}
 
-document
-.getElementById(
-'checkoutModal'
-)
-.classList
-.add('show');
+          </div>
 
-setTimeout(
-() => {
 
-document
-.getElementById(
-'destination'
-)
-.focus();
+          <h3>
 
-},
-100
-);
+            ${escapeHTML(
+              product.name
+            )}
 
-}catch(error){
+          </h3>
 
-console.error(error);
 
-alert(
-'Gagal mengambil data produk: ' +
-error.message
-);
+          <div class="product-description">
 
-}
+            ${escapeHTML(
+              product.description || ''
+            )}
 
-}
+          </div>
 
 
-window.closeCheckout =
-function(){
+          <div class="variants-title">
 
-document
-.getElementById(
-'checkoutModal'
-)
-.classList
-.remove('show');
+            Pilih Nominal
 
-};
+          </div>
 
 
-/* =========================
-   CREATE ORDER
-========================= */
+          ${variantsHTML}
 
-document
-.getElementById(
-'checkoutForm'
-)
-.addEventListener(
-'submit',
-async event => {
+        `;
 
-event.preventDefault();
 
-if(!selectedVariant){
-return;
-}
+        productsContainer
+          .appendChild(card);
 
-const destination =
-document
-.getElementById(
-'destination'
-)
-.value
-.trim();
+      });
 
-const customerName =
-document
-.getElementById(
-'customerName'
-)
-.value
-.trim();
 
-const paymentInput =
-document
-.querySelector(
-'input[name="paymentMethod"]:checked'
-);
+      document
+        .querySelectorAll(
+          '.buy-button'
+        )
+        .forEach(button => {
 
-const paymentMethod =
-paymentInput
-? paymentInput.value
-: '';
+          button.addEventListener(
+            'click',
+            () => {
 
-if(
-!destination ||
-!paymentMethod
-){
+              const id =
+                Number(
+                  button.dataset
+                    .variantId
+                );
 
-alert(
-'Lengkapi nomor tujuan dan metode pembayaran.'
-);
+              openCheckout(id);
 
-return;
+            }
+          );
 
-}
+        });
 
-const submitButton =
-document
-.getElementById(
-'submitOrder'
-);
 
-submitButton.disabled =
-true;
+    } catch (error) {
 
-submitButton.textContent =
-'Membuat pesanan...';
+      console.error(
+        'Supabase error:',
+        error
+      );
 
 
-const orderCode =
-'CP-' +
-Date.now()
-.toString(36)
-.toUpperCase();
+      productsContainer.innerHTML = `
 
+        <div class="error">
 
-try{
+          Gagal memuat produk.
 
-const {
-data,
-error
-} =
-await supabase
-.from('orders')
-.insert({
+          <br><br>
 
-order_code:
-orderCode,
+          <small>
 
-product_id:
-selectedVariant.product_id,
+            ${escapeHTML(
+              error.message ||
+              'Unknown error'
+            )}
 
-variant_id:
-selectedVariant.id,
+          </small>
 
-customer_name:
-customerName || null,
+        </div>
 
-customer_contact:
-destination,
+      `;
 
-destination:
-destination,
+    }
 
-quantity:
-1,
+  }
 
-price_idr:
-selectedVariant.price_idr,
 
-price_usd:
-selectedVariant.price_usd,
+  /* =========================
+     OPEN CHECKOUT
+  ========================= */
 
-exchange_rate:
-12000,
+  async function openCheckout(
+    variantId
+  ) {
 
-payment_method:
-paymentMethod,
+    const {
+      data,
+      error
+    } = await supabase
 
-payment_status:
-'pending',
+      .from('product_variants')
 
-order_status:
-'payment_pending'
+      .select(`
+        id,
+        name,
+        nominal,
+        price_idr,
+        price_usd,
+        product_id,
 
-})
-.select()
-.single();
+        products (
+          name
+        )
+      `)
 
+      .eq(
+        'id',
+        variantId
+      )
 
-if(error){
-throw error;
-}
+      .single();
 
 
-/*
-================================
-REDIRECT PEMBAYARAN
-================================
+    if (error) {
 
-File pembayaran kamu adalah:
-order.html
+      console.error(error);
 
-Jadi setelah order berhasil,
-langsung masuk:
+      alert(
+        'Gagal mengambil data produk.'
+      );
 
-order.html?order=CP-XXXX
-*/
+      return;
 
-window.location.href =
-'order.html?order=' +
-encodeURIComponent(
-data.order_code
-);
+    }
 
-}catch(error){
 
-console.error(
-'Create order error:',
-error
-);
+    selectedVariant = data;
 
-document
-.getElementById(
-'checkoutResult'
-)
-.innerHTML = `
 
-<div class="error">
+    const productName =
+      data.products
+        ? data.products.name
+        : data.name;
 
-Gagal membuat pesanan.
 
-<br><br>
+    const productLabel =
+      productName +
+      ' — ' +
+      formatNominal(
+        data.nominal
+      );
 
-<small>
 
-${escapeHTML(
-error.message ||
-'Unknown error'
-)}
+    document
+      .getElementById(
+        'checkoutProduct'
+      )
+      .textContent =
+      productLabel;
 
-</small>
 
-</div>
+    document
+      .getElementById(
+        'summaryProduct'
+      )
+      .textContent =
+      productLabel;
 
-`;
 
-submitButton.disabled =
-false;
+    document
+      .getElementById(
+        'checkoutPrice'
+      )
+      .textContent =
+      formatIDR(
+        data.price_idr
+      );
 
-submitButton.textContent =
-'🔒 Buat Pesanan';
 
-}
+    document
+      .getElementById(
+        'checkoutUSD'
+      )
+      .textContent =
+      data.price_usd
+        ? '$' +
+          Number(
+            data.price_usd
+          ).toFixed(2)
+        : '-';
 
-}
-);
 
+    document
+      .getElementById(
+        'checkoutResult'
+      )
+      .innerHTML = '';
 
-/* =========================
-   HELPERS
-========================= */
 
-function formatIDR(
-value
-){
+    document
+      .getElementById(
+        'checkoutModal'
+      )
+      .classList
+      .add('show');
 
-return new Intl.NumberFormat(
-'id-ID',
-{
-style:'currency',
-currency:'IDR',
-maximumFractionDigits:0
-}
-).format(
-Number(value || 0)
-);
 
-}
+    setTimeout(
+      () => {
 
+        document
+          .getElementById(
+            'destination'
+          )
+          .focus();
 
-function formatNominal(
-value
-){
+      },
+      100
+    );
 
-const number =
-Number(value || 0);
+  }
 
-if(number >= 1000000){
 
-return (
-number / 1000000
-) + ' Juta';
+  window.closeCheckout =
+    function () {
 
-}
+      document
+        .getElementById(
+          'checkoutModal'
+        )
+        .classList
+        .remove('show');
 
-if(number >= 1000){
+    };
 
-return (
-number / 1000
-) + 'K';
 
-}
+  /* =========================
+     CREATE ORDER
+  ========================= */
 
-return number.toLocaleString(
-'id-ID'
-);
+  document
+    .getElementById(
+      'checkoutForm'
+    )
+    .addEventListener(
+      'submit',
+      async event => {
 
-}
+        event.preventDefault();
 
 
-function getIcon(
-category
-){
+        if (!selectedVariant) {
 
-switch(
-String(
-category || ''
-).toLowerCase()
-){
+          return;
 
-case 'ewallet':
-return '💳';
+        }
 
-case 'pulsa':
-return '📱';
 
-case 'pln':
-return '⚡';
+        const destination =
+          document
+            .getElementById(
+              'destination'
+            )
+            .value
+            .trim();
 
-case 'game':
-return '🎮';
 
-default:
-return '🛒';
+        const customerName =
+          document
+            .getElementById(
+              'customerName'
+            )
+            .value
+            .trim();
 
-}
 
-}
+        const paymentMethod =
+          document
+            .getElementById(
+              'paymentMethod'
+            )
+            .value;
 
 
-function escapeHTML(
-value
-){
+        if (
+          !destination ||
+          !paymentMethod
+        ) {
 
-return String(
-value || ''
-)
+          return;
 
-.replace(
-/&/g,
-'&amp;'
-)
+        }
 
-.replace(
-/</g,
-'&lt;'
-)
 
-.replace(
-/>/g,
-'&gt;'
-)
+        const submitButton =
+          document
+            .getElementById(
+              'submitOrder'
+            );
 
-.replace(
-/"/g,
-'&quot;'
-)
 
-.replace(
-/'/g,
-'&#039;'
-);
+        submitButton.disabled =
+          true;
 
-}
+        submitButton.textContent =
+          'Membuat pesanan...';
 
 
-/* START */
+        const orderCode =
+          'CP-' +
+          Date.now()
+            .toString(36)
+            .toUpperCase();
 
-loadProducts();
+
+        try {
+
+          const {
+            data,
+            error
+          } = await supabase
+
+            .from('orders')
+
+            .insert({
+
+              order_code:
+                orderCode,
+
+              product_id:
+                selectedVariant
+                  .product_id,
+
+              variant_id:
+                selectedVariant.id,
+
+              customer_name:
+                customerName ||
+                null,
+
+              customer_contact:
+                destination,
+
+              destination:
+                destination,
+
+              quantity:
+                1,
+
+              price_idr:
+                selectedVariant
+                  .price_idr,
+
+              price_usd:
+                selectedVariant
+                  .price_usd,
+
+              exchange_rate:
+                12000,
+
+              payment_method:
+                paymentMethod,
+
+              payment_status:
+                'pending',
+
+              order_status:
+                'payment_pending'
+
+            })
+
+            .select()
+
+            .single();
+
+
+          if (error) {
+
+            throw error;
+
+          }
+
+
+          /*
+            ORDER BERHASIL DIBUAT.
+
+            Langsung buka order.html
+            agar pembeli masuk ke halaman
+            pembayaran sesuai metode yang dipilih.
+          */
+
+          window.location.href =
+            'order.html?order=' +
+            encodeURIComponent(
+              data.order_code
+            );
+
+
+        } catch (error) {
+
+          console.error(
+            error
+          );
+
+
+          document
+            .getElementById(
+              'checkoutResult'
+            )
+            .innerHTML = `
+
+              <div
+                style="
+                  background:#fef2f2;
+                  border:1px solid #fecaca;
+                  color:#991b1b;
+                  padding:14px;
+                  border-radius:12px;
+                "
+              >
+
+                Gagal membuat pesanan.
+
+                <br><br>
+
+                <small>
+
+                  ${escapeHTML(
+                    error.message ||
+                    'Unknown error'
+                  )}
+
+                </small>
+
+              </div>
+
+            `;
+
+        } finally {
+
+          submitButton.disabled =
+            false;
+
+          submitButton.textContent =
+            'Buat Pesanan';
+
+        }
+
+      }
+    );
+
+
+  /* =========================
+     HELPERS
+  ========================= */
+
+  function formatIDR(
+    value
+  ) {
+
+    return new Intl.NumberFormat(
+      'id-ID',
+      {
+        style: 'currency',
+        currency: 'IDR',
+        maximumFractionDigits: 0
+      }
+    ).format(
+      Number(value || 0)
+    );
+
+  }
+
+
+  function formatNominal(
+    value
+  ) {
+
+    const number =
+      Number(value || 0);
+
+
+    if (
+      number >= 1000000
+    ) {
+
+      return (
+        number / 1000000
+      ) + ' Juta';
+
+    }
+
+
+    if (
+      number >= 1000
+    ) {
+
+      return (
+        number / 1000
+      ) + 'K';
+
+    }
+
+
+    return number
+      .toLocaleString(
+        'id-ID'
+      );
+
+  }
+
+
+  function getIcon(
+    category
+  ) {
+
+    if (
+      category === 'ewallet'
+    ) {
+
+      return '💳';
+
+    }
+
+
+    if (
+      category === 'pulsa'
+    ) {
+
+      return '📱';
+
+    }
+
+
+    if (
+      category === 'pln'
+    ) {
+
+      return '⚡';
+
+    }
+
+
+    if (
+      category === 'game'
+    ) {
+
+      return '🎮';
+
+    }
+
+
+    return '🛒';
+
+  }
+
+
+  function escapeHTML(
+    value
+  ) {
+
+    return String(
+      value || ''
+    )
+
+      .replace(
+        /&/g,
+        '&amp;'
+      )
+
+      .replace(
+        /</g,
+        '&lt;'
+      )
+
+      .replace(
+        />/g,
+        '&gt;'
+      )
+
+      .replace(
+        /"/g,
+        '&quot;'
+      )
+
+      .replace(
+        /'/g,
+        '&#039;'
+      );
+
+  }
+
+
+  loadProducts();
 
 </script>
 
 </body>
-</html>
+   </html>
