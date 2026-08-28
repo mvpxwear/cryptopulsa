@@ -1,47 +1,33 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CryptoPulsa</title>
-</head>
-<body>
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-  <h1>CryptoPulsa</h1>
-  <p>Pulsa & Saldo Digital Otomatis 24 Jam</p>
+const supabase = createClient(
+  'https://yteecjibmanhdxkdseod.supabase.co',
+  'sb_publishable_x4MDLBw3OBSS2HnyB2ssKg_UfWOS_H4'
+)
 
-  <div id="products">
-    Memuat produk...
-  </div>
+async function loadProducts() {
+  const container = document.getElementById('products')
 
-  <script type="module">
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
 
-    const supabase = createClient(
-      'https://yteecjibmanhdxkdseod.supabase.co',
-      'sb_publishable_x4MDLBw3OBSS2HnyB2ssKg_UfWOS_H4'
-    )
-
-    async function loadProducts() {
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-
-      const container = document.getElementById('products')
-
-      if (error) {
-        container.innerHTML = 'Gagal memuat produk'
-        console.error(error)
-        return
-      }
-
-      container.innerHTML = `
-        <pre>${JSON.stringify(data, null, 2)}</pre>
-      `
+    if (error) {
+      container.innerHTML =
+        '<pre>' + JSON.stringify(error, null, 2) + '</pre>'
+      return
     }
 
-    loadProducts()
-  </script>
+    container.innerHTML =
+      '<pre>' + JSON.stringify(data, null, 2) + '</pre>'
 
-</body>
-</html>
+  } catch (e) {
+    container.innerHTML =
+      '<pre>' + e.message + '</pre>'
+  }
+}
+
+loadProducts()
+</script>
